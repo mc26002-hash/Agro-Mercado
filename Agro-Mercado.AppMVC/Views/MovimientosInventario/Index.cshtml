@@ -1,5 +1,42 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<Agro_Mercado.AppMVC.Models.MovimientosInventario>
+
 @{
+    ViewData["Title"] = "Movimientos de Inventario";
 }
+
+<h2>Movimientos de Inventario</h2>
+
+<p>
+    <a asp-action="CrearEntrada" class="btn btn-primary">
+        Registrar Entrada
+    </a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Tipo Movimiento</th>
+            <th>Cantidad</th>
+            <th>Fecha</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Producto.Nombre</td>
+                <td>@item.TipoMovimiento</td>
+                <td>@item.Cantidad</td>
+                <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Detalle</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

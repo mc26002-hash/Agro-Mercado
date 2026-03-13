@@ -1,5 +1,51 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Agro_Mercado.AppMVC.Models.MovimientosInventario
+
 @{
+    ViewData["Title"] = "Detalle Movimiento";
 }
+
+<h2>Detalle del Movimiento</h2>
+
+<div>
+
+    <dl class="row">
+
+        <dt class="col-sm-3">
+            Producto
+        </dt>
+
+        <dd class="col-sm-9">
+            @Model.Producto.Nombre
+        </dd>
+
+        <dt class="col-sm-3">
+            Tipo Movimiento
+        </dt>
+
+        <dd class="col-sm-9">
+            @Model.TipoMovimiento
+        </dd>
+
+        <dt class="col-sm-3">
+            Cantidad
+        </dt>
+
+        <dd class="col-sm-9">
+            @Model.Cantidad
+        </dd>
+
+        <dt class="col-sm-3">
+            Fecha
+        </dt>
+
+        <dd class="col-sm-9">
+            @Model.Fecha
+        </dd>
+
+    </dl>
+
+</div>
+
+<a asp-action="Index" class="btn btn-secondary">
+    Volver
+</a>
