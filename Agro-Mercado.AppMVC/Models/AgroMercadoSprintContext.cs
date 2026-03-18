@@ -53,7 +53,7 @@ public partial class AgroMercadoSprintContext : DbContext
             entity.ToTable("AjusteInventario");
 
             entity.Property(e => e.Fecha)
-                .HasDefaultValueSql("(getdate())")
+                .HasDefaultValueSql("(getdate())", "DF__AjusteInv__Fecha__73BA3083")
                 .HasColumnType("datetime");
             entity.Property(e => e.Motivo)
                 .HasMaxLength(200)
@@ -69,10 +69,12 @@ public partial class AgroMercadoSprintContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Categori__3214EC0779FC24A7");
 
-            entity.Property(e => e.Descripcion).HasMaxLength(200);
-            entity.Property(e => e.Estado).HasDefaultValue(true);
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Estado).HasDefaultValue(true, "DF__Categoria__Estad__74AE54BC");
             entity.Property(e => e.Nombre)
-                .HasMaxLength(100)
+                .HasMaxLength(25)
                 .IsUnicode(false);
         });
 
@@ -80,13 +82,25 @@ public partial class AgroMercadoSprintContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Clientes__3214EC07F2F6612A");
 
-            entity.Property(e => e.Activo).HasDefaultValue(true);
+            entity.Property(e => e.Activo).HasDefaultValue(true, "DF_Clientes_Activo");
             entity.Property(e => e.Direccion)
-                .HasMaxLength(200)
+                .HasMaxLength(100)
                 .IsUnicode(false);
+            entity.Property(e => e.Dui)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("DUI");
+            entity.Property(e => e.Nit)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("NIT");
             entity.Property(e => e.Nombre)
-                .HasMaxLength(150)
+                .HasMaxLength(60)
                 .IsUnicode(false);
+            entity.Property(e => e.Nrc)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("NRC");
             entity.Property(e => e.Telefono)
                 .HasMaxLength(20)
                 .IsUnicode(false);
@@ -97,7 +111,7 @@ public partial class AgroMercadoSprintContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK__Compras__3214EC077BCEEFA7");
 
             entity.Property(e => e.Fecha)
-                .HasDefaultValueSql("(getdate())")
+                .HasDefaultValueSql("(getdate())", "DF_Compras_Fecha")
                 .HasColumnType("datetime");
             entity.Property(e => e.Total).HasColumnType("decimal(10, 2)");
 
@@ -122,10 +136,10 @@ public partial class AgroMercadoSprintContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false);
             entity.Property(e => e.Direccion)
-                .HasMaxLength(200)
+                .HasMaxLength(100)
                 .IsUnicode(false);
             entity.Property(e => e.Nombre)
-                .HasMaxLength(150)
+                .HasMaxLength(60)
                 .IsUnicode(false);
             entity.Property(e => e.Telefono)
                 .HasMaxLength(20)
@@ -174,15 +188,15 @@ public partial class AgroMercadoSprintContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Empleado__3214EC07B645D343");
 
-            entity.Property(e => e.Activo).HasDefaultValue(true);
+            entity.Property(e => e.Activo).HasDefaultValue(true, "DF_Empleados_Activo");
             entity.Property(e => e.Correo)
                 .HasMaxLength(100)
                 .IsUnicode(false);
             entity.Property(e => e.Nombre)
-                .HasMaxLength(100)
+                .HasMaxLength(60)
                 .IsUnicode(false);
             entity.Property(e => e.Password)
-                .HasMaxLength(255)
+                .HasMaxLength(50)
                 .IsUnicode(false);
 
             entity.HasOne(d => d.Rol).WithMany(p => p.Empleados)
@@ -198,7 +212,7 @@ public partial class AgroMercadoSprintContext : DbContext
             entity.ToTable("MovimientosInventario");
 
             entity.Property(e => e.Fecha)
-                .HasDefaultValueSql("(getdate())")
+                .HasDefaultValueSql("(getdate())", "DF__Movimient__Fecha__29221CFB")
                 .HasColumnType("datetime");
             entity.Property(e => e.TipoMovimiento)
                 .HasMaxLength(20)
@@ -214,17 +228,17 @@ public partial class AgroMercadoSprintContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Producto__3214EC07F65436EC");
 
-            entity.Property(e => e.Activo).HasDefaultValue(true);
+            entity.Property(e => e.Activo).HasDefaultValue(true, "DF__Productos__Activ__797309D9");
             entity.Property(e => e.FechaRegistro)
-                .HasDefaultValueSql("(getdate())")
+                .HasDefaultValueSql("(getdate())", "DF__Productos__Fecha__2BFE89A6")
                 .HasColumnType("datetime");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(150)
                 .IsUnicode(false);
             entity.Property(e => e.PrecioCompraPromedio).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.PrecioVenta).HasColumnType("decimal(10, 2)");
-            entity.Property(e => e.Stock).HasDefaultValue(0);
-            entity.Property(e => e.StockMinimo).HasDefaultValue(0);
+            entity.Property(e => e.Stock).HasDefaultValue(0, "DF__Productos__Stock__787EE5A0");
+            entity.Property(e => e.StockMinimo).HasDefaultValue(0, "DF__Productos__Stock__2B0A656D");
 
             entity.HasOne(d => d.Categoria).WithMany(p => p.Productos)
                 .HasForeignKey(d => d.CategoriaId)
@@ -241,13 +255,24 @@ public partial class AgroMercadoSprintContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Proveedo__3214EC07E65ECA02");
 
-            entity.Property(e => e.Activo).HasDefaultValue(true);
+            entity.Property(e => e.Activo).HasDefaultValue(true, "DF_Proveedores_Activo");
+            entity.Property(e => e.CorreoElectronico)
+                .HasMaxLength(100)
+                .IsUnicode(false);
             entity.Property(e => e.Direccion)
-                .HasMaxLength(200)
+                .HasMaxLength(100)
                 .IsUnicode(false);
+            entity.Property(e => e.Nit)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("NIT");
             entity.Property(e => e.Nombre)
-                .HasMaxLength(150)
+                .HasMaxLength(100)
                 .IsUnicode(false);
+            entity.Property(e => e.Nrc)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("NRC");
             entity.Property(e => e.Telefono)
                 .HasMaxLength(20)
                 .IsUnicode(false);
@@ -258,7 +283,7 @@ public partial class AgroMercadoSprintContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK__Roles__3214EC077F8148AE");
 
             entity.Property(e => e.Nombre)
-                .HasMaxLength(50)
+                .HasMaxLength(25)
                 .IsUnicode(false);
         });
 
@@ -268,13 +293,15 @@ public partial class AgroMercadoSprintContext : DbContext
 
             entity.Property(e => e.Abreviatura)
                 .HasMaxLength(50)
-                .HasDefaultValue("");
+                .IsUnicode(false)
+                .HasDefaultValue("", "DF__UnidadMed__Abrev__7B5B524B");
             entity.Property(e => e.Nombre)
-                .HasMaxLength(50)
+                .HasMaxLength(25)
                 .IsUnicode(false);
             entity.Property(e => e.Tipo)
-                .HasMaxLength(50)
-                .HasDefaultValue("");
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasDefaultValue("", "DF__UnidadMedi__Tipo__7C4F7684");
         });
 
         modelBuilder.Entity<Venta>(entity =>
@@ -282,8 +309,21 @@ public partial class AgroMercadoSprintContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK__Ventas__3214EC07831EA5B0");
 
             entity.Property(e => e.Fecha)
+                .HasDefaultValueSql("(getdate())", "DF_Ventas_Fecha")
+                .HasColumnType("datetime");
+            entity.Property(e => e.FechaFactura)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.Iva)
+                .HasColumnType("decimal(10, 2)")
+                .HasColumnName("IVA");
+            entity.Property(e => e.MetodoPago)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.NumeroFactura)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.SubTotal).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.Total).HasColumnType("decimal(10, 2)");
 
             entity.HasOne(d => d.Cliente).WithMany(p => p.Venta)

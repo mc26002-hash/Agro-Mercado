@@ -15,5 +15,11 @@ public partial class Cliente
 
     public bool? Activo { get; set; }
 
+    public string? Nit { get; set; }
+
+    public string? Nrc { get; set; }
+
+    public string? Dui { get; set; }
+
     public virtual ICollection<Venta> Venta { get; set; } = new List<Venta>();
 }

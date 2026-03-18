@@ -11,9 +11,15 @@ public partial class Proveedore
 
     public string? Telefono { get; set; }
 
-    public string? Direccion { get; set; }
+    public string Direccion { get; set; } = null!;
 
     public bool? Activo { get; set; }
+
+    public string? Nit { get; set; }
+
+    public string? Nrc { get; set; }
+
+    public string? CorreoElectronico { get; set; }
 
     public virtual ICollection<Compra> Compras { get; set; } = new List<Compra>();
 }
