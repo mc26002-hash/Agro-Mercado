@@ -6,18 +6,21 @@
     <input type="hidden" asp-for="Id" />
 
     <div class="mb-3">
-        <label asp-for="Nombre" class="form-label"></label>
+        <label>Nombre</label>
         <input asp-for="Nombre" class="form-control" />
     </div>
 
     <div class="mb-3">
-        <label asp-for="Descripcion" class="form-label"></label>
+        <label>Descripcion</label>
         <input asp-for="Descripcion" class="form-control" />
     </div>
 
-    <div class="form-check mb-3">
-        <input asp-for="Estado" class="form-check-input" />
-        <label asp-for="Estado" class="form-check-label">Activa</label>
+    <div class="mb-3">
+        <label>Estado</label>
+        <select asp-for="Estado" class="form-control">
+            <option value="true">Activo</option>
+            <option value="false">Inactivo</option>
+        </select>
     </div>
 
     <button type="submit" class="btn btn-primary">Actualizar</button>
