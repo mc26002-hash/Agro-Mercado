@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Agro_Mercado.AppMVC.Models;
+﻿using Agro_Mercado.AppMVC.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Agro_Mercado.AppMVC.Controllers
@@ -14,15 +14,15 @@ namespace Agro_Mercado.AppMVC.Controllers
         }
 
         // LISTAR
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             if (!TieneAcceso(1))
                 return RedirectToAction("Index", "Home");
 
-            var productos = _context.Productos
+            var productos = await _context.Productos
                 .Include(p => p.Categoria)
                 .Include(p => p.UnidadMedida)
-                .ToList();
+                .ToListAsync();
 
             return View(productos);
         }
@@ -42,7 +42,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         // CREAR POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Producto producto)
+        public async Task<IActionResult> Create(Producto producto)
         {
             if (!TieneAcceso(1))
                 return RedirectToAction("Index", "Home");
@@ -52,23 +52,13 @@ namespace Agro_Mercado.AppMVC.Controllers
 
             if (ModelState.IsValid)
             {
-                var nuevoProducto = new Producto
-                {
-                    Nombre = producto.Nombre,
-                    CategoriaId = producto.CategoriaId,
-                    UnidadMedidaId = producto.UnidadMedidaId,
-                    PrecioVenta = producto.PrecioVenta,
-                    PrecioCompraPromedio = producto.PrecioCompraPromedio,
-                    Stock = producto.Stock,
-                    StockMinimo = producto.StockMinimo,
-                    FechaRegistro = DateTime.Now,
-                    Activo = producto.Activo
-                };
+                if (producto.FechaRegistro == null)
+                    producto.FechaRegistro = DateTime.Now;
 
-                _context.Productos.Add(nuevoProducto);
-                _context.SaveChanges();
+                _context.Productos.Add(producto);
+                await _context.SaveChangesAsync();
 
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
 
             ViewBag.Categorias = _context.Categorias.ToList();
@@ -78,12 +68,12 @@ namespace Agro_Mercado.AppMVC.Controllers
         }
 
         // EDITAR GET
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (!TieneAcceso(1))
                 return RedirectToAction("Index", "Home");
 
-            var producto = _context.Productos.Find(id);
+            var producto = await _context.Productos.FindAsync(id);
 
             if (producto == null)
                 return NotFound();
@@ -97,50 +87,68 @@ namespace Agro_Mercado.AppMVC.Controllers
         // EDITAR POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Producto producto)
+        public async Task<IActionResult> Edit(int id, Producto producto)
         {
             if (!TieneAcceso(1))
                 return RedirectToAction("Index", "Home");
+
+            if (id != producto.Id)
+                return NotFound();
 
             ModelState.Remove("Categoria");
             ModelState.Remove("UnidadMedida");
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                ViewBag.Categorias = _context.Categorias.ToList();
-                ViewBag.Unidades = _context.UnidadMedida.ToList();
-                return View(producto);
+                try
+                {
+                    _context.Update(producto);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.Productos.Any(e => e.Id == producto.Id))
+                        return NotFound();
+                    else
+                        throw;
+                }
+
+                return RedirectToAction(nameof(Index));
             }
 
-            var productoDb = _context.Productos.Find(id);
+            ViewBag.Categorias = _context.Categorias.ToList();
+            ViewBag.Unidades = _context.UnidadMedida.ToList();
 
-            if (productoDb == null)
-                return NotFound();
-
-            productoDb.Nombre = producto.Nombre;
-            productoDb.CategoriaId = producto.CategoriaId;
-            productoDb.UnidadMedidaId = producto.UnidadMedidaId;
-            productoDb.PrecioVenta = producto.PrecioVenta;
-            productoDb.PrecioCompraPromedio = producto.PrecioCompraPromedio;
-            productoDb.Stock = producto.Stock;
-            productoDb.StockMinimo = producto.StockMinimo;
-            productoDb.Activo = producto.Activo;
-
-            _context.SaveChanges();
-
-            return RedirectToAction("Index");
+            return View(producto);
         }
 
-        // DELETE GET
-        public IActionResult Delete(int id)
+        // DETAILS
+        public async Task<IActionResult> Details(int id)
         {
             if (!TieneAcceso(1))
                 return RedirectToAction("Index", "Home");
 
-            var producto = _context.Productos
+            var producto = await _context.Productos
                 .Include(p => p.Categoria)
                 .Include(p => p.UnidadMedida)
-                .FirstOrDefault(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (producto == null)
+                return NotFound();
+
+            return View(producto);
+        }
+
+        // DELETE GET
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (!TieneAcceso(1))
+                return RedirectToAction("Index", "Home");
+
+            var producto = await _context.Productos
+                .Include(p => p.Categoria)
+                .Include(p => p.UnidadMedida)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (producto == null)
                 return NotFound();
@@ -149,39 +157,22 @@ namespace Agro_Mercado.AppMVC.Controllers
         }
 
         // DELETE POST
-        [HttpPost, ActionName("DeleteConfirmed")]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (!TieneAcceso(1))
                 return RedirectToAction("Index", "Home");
 
-            var producto = _context.Productos.Find(id);
+            var producto = await _context.Productos.FindAsync(id);
 
             if (producto != null)
             {
                 _context.Productos.Remove(producto);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
 
             return RedirectToAction(nameof(Index));
-        }
-
-        // DETAILS
-        public IActionResult Details(int id)
-        {
-            if (!TieneAcceso(1))
-                return RedirectToAction("Index", "Home");
-
-            var producto = _context.Productos
-                .Include(p => p.Categoria)
-                .Include(p => p.UnidadMedida)
-                .FirstOrDefault(p => p.Id == id);
-
-            if (producto == null)
-                return NotFound();
-
-            return View(producto);
         }
     }
 }
