@@ -1,203 +1,160 @@
 ﻿@inject Agro_Mercado.AppMVC.Models.AgroMercadoSprintContext _context
 
 @{
-    var datosNegocio = _context.DatosNegocios.FirstOrDefault();
-}
-@{
     var rolId = Context.Session.GetInt32("RolId");
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Agromercado.AppMVC</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - AgroMercado</title>
+
+    <!-- Bootstrap -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Agromercado.AppMVC.styles.css" asp-append-version="true" />
+
+    <!-- Bootstrap Icons 🔥 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <style>
-        /* ESTRUCTURA CORREGIDA PARA FOOTER ABAJO */
-        html {
-            height: 100%;
-        }
-
-        body {
-            min-height: 100vh;
-            background-color: #f4f1ea;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-        }
-
-        main {
-            background-color: white;
-            padding: 25px;
-            padding-bottom: 120px;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-            flex: 1;
-        }
-
-        footer {
-            background: linear-gradient(90deg, #2e7d32, #4caf50);
-            color: white !important;
-            padding: 15px 0;
-            margin-top: 80px;
-        }
-
-            footer a {
-                color: #ffeb3b !important;
-                text-decoration: none;
+            body {
+                margin: 0;
+                background-color: #f4f6f9;
             }
 
-        /* NAVBAR ESTILO AGRO */
-        .navbar {
-            background: linear-gradient(90deg, #2e7d32, #4caf50) !important;
-        }
-
-            .navbar .nav-link,
-            .navbar-brand {
-                color: white !important;
-                font-weight: 500;
+            /* SIDEBAR */
+            .sidebar {
+                width: 240px;
+                height: 100vh;
+                position: fixed;
+                background: linear-gradient(180deg, #2e7d32, #1b5e20);
+                color: white;
+                padding-top: 20px;
             }
 
-                .navbar .nav-link:hover {
-                    color: #ffeb3b !important;
+                .sidebar h4 {
+                    text-align: center;
+                    font-weight: bold;
+                    margin-bottom: 30px;
+                }
+
+                .sidebar a {
+                    display: block;
+                    color: white;
+                    padding: 12px 20px;
+                    text-decoration: none;
                     transition: 0.3s;
                 }
 
-        /* CONTENIDO */
+                    .sidebar a:hover {
+                        background-color: rgba(255,255,255,0.15);
+                        padding-left: 25px;
+                    }
 
-        h1, h2, h3 {
-            color: #2e7d32;
-            font-weight: bold;
-        }
+                .sidebar i {
+                    margin-right: 10px;
+                }
 
-        /* BOTONES */
-        .btn-success {
-            background-color: #2e7d32;
-            border: none;
-        }
-
-            .btn-success:hover {
-                background-color: #1b5e20;
+            /* CONTENIDO */
+            .content {
+                margin-left: 240px;
+                padding: 20px;
             }
 
-        .btn-danger {
-            background-color: #c62828;
-            border: none;
-        }
+            main {
+                background: white;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            }
 
-            .btn-danger:hover {
-                background-color: #8e0000;
+            h2 {
+                color: #2e7d32;
+                font-weight: bold;
+            }
+
+            /* FOOTER */
+            footer {
+                margin-top: 40px;
+                text-align: center;
+                color: gray;
             }
     </style>
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">🌾 AgroMercado </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
 
+    <!-- 🌱 SIDEBAR -->
+    <div class="sidebar">
+        <h4>🌾 AgroMercado</h4>
 
-                        @if (rolId == 1)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Empleado" asp-action="Index">
-                                    Empleados
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="DatosNegocio" asp-action="Index">
-                                    Configuración
-                                </a>
-                            </li>
-                        }
-                        @if (rolId == 1 || rolId == 6 || rolId == 8)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="UnidadesMedida" asp-action="Index">
-                                    Unidades de Medida
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Categorias" asp-action="Index">
-                                    Categorías
-                                </a>
-                            </li>
-                        }
-                        @if (rolId == 1)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Role" asp-action="Index">
-                                    Rol
-                                </a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                    Inventario
-                                </a>
+        <a asp-controller="Home" asp-action="Index">
+            <i class="bi bi-house"></i> Inicio
+        </a>
 
-                                <ul class="dropdown-menu">
+        @if (rolId == 1)
+        {
+            <a asp-controller="Empleado" asp-action="Index">
+                <i class="bi bi-people"></i> Empleados
+            </a>
 
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Producto" asp-action="Index">
-                                            Productos
-                                        </a>
-                                    </li>
+            <a asp-controller="Role" asp-action="Index">
+                <i class="bi bi-person-badge"></i> Roles
+            </a>
 
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="MovimientosInventario" asp-action="Index">
-                                            Movimientos
-                                        </a>
-                                    </li>
+            <a asp-controller="DatosNegocio" asp-action="Index">
+                <i class="bi bi-gear"></i> Configuración
+            </a>
+        }
 
-                                </ul>
-                            </li>
-                        }
-                        @if (Context.Session.GetString("Usuario") != null)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-danger" asp-controller="Account" asp-action="Logout">
-                                    Cerrar Sesión
-                                </a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container pb-3">
+        @if (rolId == 1 || rolId == 6 || rolId == 8)
+        {
+            <a asp-controller="Categorias" asp-action="Index">
+                <i class="bi bi-tags"></i> Categorías
+            </a>
 
-        <main role="main">
+            <a asp-controller="UnidadesMedida" asp-action="Index">
+                <i class="bi bi-rulers"></i> Unidades
+            </a>
+        }
+
+        @if (rolId == 1)
+        {
+            <a asp-controller="Producto" asp-action="Index">
+                <i class="bi bi-box-seam"></i> Productos
+            </a>
+
+            <a asp-controller="MovimientosInventario" asp-action="Index">
+                <i class="bi bi-arrow-left-right"></i> Movimientos
+            </a>
+        }
+
+        <hr style="border-color: rgba(255,255,255,0.3)" />
+
+        @if (Context.Session.GetString("Usuario") != null)
+        {
+            <a asp-controller="Account" asp-action="Logout">
+                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+            </a>
+        }
+    </div>
+
+    <!-- CONTENIDO -->
+    <div class="content">
+        <main>
             @RenderBody()
         </main>
 
-        <footer class="border-top text-muted">
-            <div class="container">
-                &copy; 2026 - Agromercado.AppMVC -
-                <a asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </div>
+        <footer>
+            <p>&copy; 2026 - AgroMercado 🌱</p>
         </footer>
-
     </div>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <!-- Scripts -->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
-</html>
+</html> 

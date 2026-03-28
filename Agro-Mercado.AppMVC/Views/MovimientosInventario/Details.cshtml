@@ -6,45 +6,45 @@
 
 <h2>Detalle del Movimiento</h2>
 
-<div>
+<div class="card">
+    <div class="card-body">
 
-    <dl class="row">
+        <dl class="row">
 
-        <dt class="col-sm-3">
-            Producto
-        </dt>
+            <dt class="col-sm-3">
+                Producto
+            </dt>
+            <dd class="col-sm-9">
+                @Model.Producto.Nombre
+            </dd>
 
-        <dd class="col-sm-9">
-            @Model.Producto.Nombre
-        </dd>
+            <dt class="col-sm-3">
+                Tipo Movimiento
+            </dt>
+            <dd class="col-sm-9">
+                @Model.TipoMovimiento
+            </dd>
 
-        <dt class="col-sm-3">
-            Tipo Movimiento
-        </dt>
+            <dt class="col-sm-3">
+                Cantidad
+            </dt>
+            <dd class="col-sm-9">
+                @Model.Cantidad
+            </dd>
 
-        <dd class="col-sm-9">
-            @Model.TipoMovimiento
-        </dd>
+            <dt class="col-sm-3">
+                Fecha
+            </dt>
+            <dd class="col-sm-9">
+                @Model.Fecha.ToString("dd/MM/yyyy HH:mm")
+            </dd>
 
-        <dt class="col-sm-3">
-            Cantidad
-        </dt>
+        </dl>
 
-        <dd class="col-sm-9">
-            @Model.Cantidad
-        </dd>
-
-        <dt class="col-sm-3">
-            Fecha
-        </dt>
-
-        <dd class="col-sm-9">
-            @Model.Fecha
-        </dd>
-
-    </dl>
-
+    </div>
 </div>
+
+<br />
 
 <a asp-action="Index" class="btn btn-secondary">
     Volver

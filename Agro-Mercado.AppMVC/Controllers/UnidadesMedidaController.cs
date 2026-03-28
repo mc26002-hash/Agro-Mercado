@@ -1,5 +1,4 @@
-﻿using Agro_Mercado.AppMVC.Controllers;
-using Agro_Mercado.AppMVC.Models;
+﻿using Agro_Mercado.AppMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
@@ -14,13 +13,35 @@ namespace Agro_Mercado.AppMVC.Controllers
             _context = context;
         }
 
-        // LISTAR
-        public IActionResult Index()
+        public IActionResult Index(UnidadMedidum? unidadSearch, int topRegistro = 10)
         {
             if (!TieneAcceso(1, 6, 8))
                 return RedirectToAction("Index", "Home");
 
-            var lista = _context.UnidadMedida.ToList();
+            if (unidadSearch == null)
+                unidadSearch = new UnidadMedidum();
+
+            var query = _context.UnidadMedida.AsQueryable();
+
+            // 🔍 Nombre
+            if (!string.IsNullOrWhiteSpace(unidadSearch.Nombre))
+                query = query.Where(u => u.Nombre.Contains(unidadSearch.Nombre));
+
+            // 🔍 Abreviatura
+            if (!string.IsNullOrWhiteSpace(unidadSearch.Abreviatura))
+                query = query.Where(u => u.Abreviatura.Contains(unidadSearch.Abreviatura));
+
+            // 🔍 Tipo
+            if (!string.IsNullOrWhiteSpace(unidadSearch.Tipo))
+                query = query.Where(u => u.Tipo.Contains(unidadSearch.Tipo));
+
+            // 🔢 Orden + cantidad
+            query = query
+                .OrderByDescending(u => u.Id)
+                .Take(topRegistro);
+
+            var lista = query.ToList();
+
             return View(lista);
         }
 

@@ -2,11 +2,107 @@
 
 <h2>Productos</h2>
 
-<a asp-action="Create" class="btn btn-primary mb-3">
-    Nuevo Producto
-</a>
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Buscar Productos</h5>
 
-<table class="table table-bordered">
+            <form asp-controller="Producto" asp-action="Index" method="get">
+                <div class="row g-3 align-items-end">
+
+                    <!-- 🔍 Nombre -->
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold text-muted small">Nombre</label>
+                        <div class="input-group shadow-sm">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-box text-primary"></i>
+                            </span>
+                            <input type="text" name="nombre" class="form-control"
+                                   placeholder="Ej: Manzana..."
+                                   value="@Context.Request.Query["nombre"]" />
+                        </div>
+                    </div>
+
+                    <!-- 🔽 Categoría -->
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold text-muted small">Categoría</label>
+                        <div class="input-group shadow-sm">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-tags text-primary"></i>
+                            </span>
+                            <select name="categoriaId" class="form-select">
+                                <option value="0">Todas</option>
+                                @foreach (var cat in ViewBag.Categorias)
+                                {
+                                    <option value="@cat.Id"
+                                            selected="@(Context.Request.Query["categoriaId"] == cat.Id.ToString())">
+                                        @cat.Nombre
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 🔽 Unidad -->
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold text-muted small">Unidad</label>
+                        <div class="input-group shadow-sm">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-rulers text-primary"></i>
+                            </span>
+                            <select name="unidadMedidaId" class="form-select">
+                                <option value="0">Todas</option>
+                                @foreach (var uni in ViewBag.Unidades)
+                                {
+                                    <option value="@uni.Id"
+                                            selected="@(Context.Request.Query["unidadMedidaId"] == uni.Id.ToString())">
+                                        @uni.Nombre
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 🔢 Cantidad -->
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold text-muted small">Cantidad</label>
+                        <div class="input-group shadow-sm">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-list-ol text-primary"></i>
+                            </span>
+                            <input type="number" name="topRegistro" class="form-control"
+                                   placeholder="Ej: 10"
+                                   value="@Context.Request.Query["topRegistro"]" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Botones -->
+                <div class="row mt-4">
+                    <div class="col-12 d-flex gap-2">
+
+                        <button type="submit" class="btn btn-primary px-4 shadow-sm fw-bold">
+                            <i class="bi bi-search me-2"></i>Buscar
+                        </button>
+
+                        <a asp-action="Index" class="btn btn-secondary px-4 shadow-sm">
+                            Limpiar
+                        </a>
+
+                        <a asp-action="Create" class="btn btn-success px-4 shadow-sm">
+                            <i class="bi bi-plus-lg me-2"></i>Nuevo Producto
+                        </a>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered mt-4">
     <thead>
         <tr>
             <th>Nombre</th>
@@ -34,26 +130,13 @@
                 <td>@item.Stock</td>
                 <td>@item.StockMinimo</td>
                 <td>@item.FechaRegistro?.ToString("dd/MM/yyyy")</td>
+                <td>@(item.Activo == true ? "Sí" : "No")</td>
                 <td>
-                    @(item.Activo == true ? "Sí" : "No")
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Ver</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Eliminar</a>
                 </td>
-
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
-                        Ver
-                    </a>
-
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
-                        Editar
-                    </a>
-
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
-                        Eliminar
-                    </a>
-                </td>
-
             </tr>
         }
     </tbody>
-
 </table>

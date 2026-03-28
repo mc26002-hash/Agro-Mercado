@@ -2,11 +2,95 @@
 
 <h2>Categorías</h2>
 
-<a asp-action="Create" class="btn btn-primary mb-3">
-    Nueva Categoría
-</a>
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Buscar Categorías</h5>
 
-<table class="table table-bordered">
+            <form asp-controller="Categorias" asp-action="Index" method="get">
+                <div class="row g-3 align-items-end">
+
+                    <!-- 🔍 Nombre -->
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold text-muted small">Nombre</label>
+                        <div class="input-group shadow-sm">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-tag text-primary"></i>
+                            </span>
+                            <input type="text" name="nombre" class="form-control"
+                                   placeholder="Ej: Frutas..."
+                                   value="@Context.Request.Query["nombre"]" />
+                        </div>
+                    </div>
+
+                    <!-- 🔍 Descripción -->
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold text-muted small">Descripción</label>
+                        <div class="input-group shadow-sm">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-card-text text-primary"></i>
+                            </span>
+                            <input type="text" name="descripcion" class="form-control"
+                                   placeholder="Ej: Productos frescos..."
+                                   value="@Context.Request.Query["descripcion"]" />
+                        </div>
+                    </div>
+
+                    <!-- 🔽 Estado -->
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold text-muted small">Estado</label>
+                        <div class="input-group shadow-sm">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-check-circle text-primary"></i>
+                            </span>
+                            <select name="estado" class="form-select">
+                                <option value="">Todos</option>
+                                <option value="true">Activa</option>
+                                <option value="false">Inactiva</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 🔢 Cantidad -->
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold text-muted small">Cantidad</label>
+                        <div class="input-group shadow-sm">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-list-ol text-primary"></i>
+                            </span>
+                            <input type="number" name="topRegistro" class="form-control"
+                                   placeholder="Ej: 10"
+                                   value="@Context.Request.Query["topRegistro"]" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Botones -->
+                <div class="row mt-4">
+                    <div class="col-12 d-flex gap-2">
+
+                        <button type="submit" class="btn btn-primary px-4 shadow-sm fw-bold">
+                            <i class="bi bi-search me-2"></i>Buscar
+                        </button>
+
+                        <a asp-action="Index" class="btn btn-secondary px-4 shadow-sm">
+                            Limpiar
+                        </a>
+
+                        <a asp-action="Create" class="btn btn-success px-4 shadow-sm">
+                            <i class="bi bi-plus-lg me-2"></i>Nueva Categoría
+                        </a>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered mt-4">
     <thead>
         <tr>
             <th>Nombre</th>

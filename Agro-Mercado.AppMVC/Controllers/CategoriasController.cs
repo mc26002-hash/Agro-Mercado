@@ -13,13 +13,35 @@ namespace Agro_Mercado.AppMVC.Controllers
             _context = context;
         }
 
-        // LISTAR
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Categoria? categoriaSearch, int topRegistro = 10)
         {
             if (!TieneAcceso(1, 6, 8))
                 return RedirectToAction("Index", "Home");
 
-            var lista = await _context.Categorias.ToListAsync();
+            if (categoriaSearch == null)
+                categoriaSearch = new Categoria();
+
+            var query = _context.Categorias.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(categoriaSearch.Nombre))
+                query = query.Where(c => c.Nombre.Contains(categoriaSearch.Nombre));
+
+            if (!string.IsNullOrWhiteSpace(categoriaSearch.Descripcion))
+                query = query.Where(c => c.Descripcion != null &&
+                                         c.Descripcion.Contains(categoriaSearch.Descripcion));
+
+            if (Request.Query["estado"] == "true")
+                query = query.Where(c => c.Estado == true);
+
+            if (Request.Query["estado"] == "false")
+                query = query.Where(c => c.Estado == false);
+
+            query = query
+                .OrderByDescending(c => c.Id)
+                .Take(topRegistro);
+
+            var lista = await query.ToListAsync();
+
             return View(lista);
         }
 

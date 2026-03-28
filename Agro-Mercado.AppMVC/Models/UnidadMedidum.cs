@@ -1,9 +1,8 @@
-﻿using Agro_Mercado.AppMVC.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Agromercado.AppMVC.Models;
+namespace Agro_Mercado.AppMVC.Models;
 
 public partial class UnidadMedidum
 {

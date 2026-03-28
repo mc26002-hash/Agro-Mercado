@@ -14,13 +14,27 @@ namespace Agro_Mercado.AppMVC.Controllers
             _context = context;
         }
 
-        // LISTAR
-        public IActionResult Index()
+        public IActionResult Index(Role? roleSearch, int topRegistro = 10)
         {
             if (!TieneAcceso(1))
                 return RedirectToAction("Index", "Home");
 
-            var roles = _context.Roles.ToList();
+            if (roleSearch == null)
+                roleSearch = new Role();
+
+            var query = _context.Roles.AsQueryable();
+
+            // 🔍 Nombre
+            if (!string.IsNullOrWhiteSpace(roleSearch.Nombre))
+                query = query.Where(r => r.Nombre.Contains(roleSearch.Nombre));
+
+            // 🔢 Orden + cantidad
+            query = query
+                .OrderByDescending(r => r.Id)
+                .Take(topRegistro);
+
+            var roles = query.ToList();
+
             return View(roles);
         }
 

@@ -13,16 +13,41 @@ namespace Agro_Mercado.AppMVC.Controllers
             _context = context;
         }
 
-        // LISTAR
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Producto? productoSearch, int topRegistro = 10)
         {
             if (!TieneAcceso(1))
                 return RedirectToAction("Index", "Home");
 
-            var productos = await _context.Productos
+            if (productoSearch == null)
+                productoSearch = new Producto();
+
+            var query = _context.Productos
                 .Include(p => p.Categoria)
                 .Include(p => p.UnidadMedida)
-                .ToListAsync();
+                .AsQueryable();
+
+            // 🔍 Nombre
+            if (!string.IsNullOrWhiteSpace(productoSearch.Nombre))
+                query = query.Where(p => p.Nombre.Contains(productoSearch.Nombre));
+
+            // 🔍 Categoría
+            if (productoSearch.CategoriaId > 0)
+                query = query.Where(p => p.CategoriaId == productoSearch.CategoriaId);
+
+            // 🔍 Unidad de medida
+            if (productoSearch.UnidadMedidaId > 0)
+                query = query.Where(p => p.UnidadMedidaId == productoSearch.UnidadMedidaId);
+
+            // 🔢 Orden + cantidad
+            query = query
+                .OrderByDescending(p => p.Id)
+                .Take(topRegistro);
+
+            var productos = await query.ToListAsync();
+
+            // 🔽 Para los selects
+            ViewBag.Categorias = _context.Categorias.ToList();
+            ViewBag.Unidades = _context.UnidadMedida.ToList();
 
             return View(productos);
         }

@@ -6,6 +6,10 @@
 
 <h2>Eliminar Movimiento</h2>
 
+<div class="alert alert-warning">
+    ⚠️ Esta acción afectará el stock del producto. ¿Deseas continuar?
+</div>
+
 <h4>¿Seguro que deseas eliminar este movimiento?</h4>
 
 <div>
@@ -15,7 +19,6 @@
         <dt class="col-sm-3">
             Producto
         </dt>
-
         <dd class="col-sm-9">
             @Model.Producto.Nombre
         </dd>
@@ -23,7 +26,6 @@
         <dt class="col-sm-3">
             Tipo Movimiento
         </dt>
-
         <dd class="col-sm-9">
             @Model.TipoMovimiento
         </dd>
@@ -31,9 +33,15 @@
         <dt class="col-sm-3">
             Cantidad
         </dt>
-
         <dd class="col-sm-9">
             @Model.Cantidad
+        </dd>
+
+        <dt class="col-sm-3">
+            Fecha
+        </dt>
+        <dd class="col-sm-9">
+            @Model.Fecha.ToString("dd/MM/yyyy HH:mm")
         </dd>
 
     </dl>
