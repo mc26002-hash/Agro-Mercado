@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Registrar Salida de Inventario";
+}
+
+<h2>Registrar Salida de Inventario</h2>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <div asp-validation-summary="All"></div>
+    </div>
+}
+
+<form asp-action="CrearSalida" method="post">
+
+    <div class="form-group">
+        <label>Producto</label>
+        <select name="productoId" class="form-control" asp-items="ViewBag.Productos" required>
+            <option value="">-- Seleccione un producto --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Cantidad</label>
+        <input type="number" name="cantidad" class="form-control" min="1" required />
+    </div>
+
+    <br>
+
+    <button type="submit" class="btn btn-warning">
+        Registrar Salida
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Volver
+    </a>
+
+</form>
