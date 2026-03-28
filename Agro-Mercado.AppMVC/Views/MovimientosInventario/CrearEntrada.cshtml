@@ -15,13 +15,14 @@
 
     <div class="form-group">
         <label>Producto</label>
-        <select name="productoId" class="form-control" asp-items="ViewBag.Productos">
+        <select name="productoId" class="form-control" asp-items="ViewBag.Productos" required>
+            <option value="">-- Seleccione un producto --</option>
         </select>
     </div>
 
     <div class="form-group">
         <label>Cantidad</label>
-        <input type="number" name="cantidad" class="form-control" required />
+        <input type="number" name="cantidad" class="form-control" min="1" required />
     </div>
 
     <br>
