@@ -13,41 +13,49 @@ namespace Agro_Mercado.AppMVC.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(Producto? productoSearch, int topRegistro = 10)
+        public async Task<IActionResult> Index(Producto? productoSearch, int topRegistro = 5)
         {
             if (!TieneAcceso(1))
                 return RedirectToAction("Index", "Home");
 
+            // 🔹 Evitar null
             if (productoSearch == null)
                 productoSearch = new Producto();
 
+            // 🔹 Query base
             var query = _context.Productos
                 .Include(p => p.Categoria)
                 .Include(p => p.UnidadMedida)
                 .AsQueryable();
 
-            // 🔍 Nombre
+            // 🔍 FILTRO POR NOMBRE
             if (!string.IsNullOrWhiteSpace(productoSearch.Nombre))
                 query = query.Where(p => p.Nombre.Contains(productoSearch.Nombre));
 
-            // 🔍 Categoría
+            // 🔍 FILTRO POR CATEGORÍA
             if (productoSearch.CategoriaId > 0)
                 query = query.Where(p => p.CategoriaId == productoSearch.CategoriaId);
 
-            // 🔍 Unidad de medida
+            // 🔍 FILTRO POR UNIDAD
             if (productoSearch.UnidadMedidaId > 0)
                 query = query.Where(p => p.UnidadMedidaId == productoSearch.UnidadMedidaId);
 
-            // 🔢 Orden + cantidad
-            query = query
-                .OrderByDescending(p => p.Id)
-                .Take(topRegistro);
+            // 🔢 ORDENAR
+            query = query.OrderByDescending(p => p.Id);
 
+            // 🔥 CANTIDAD (0 = TODOS)
+            if (topRegistro > 0)
+                query = query.Take(topRegistro);
+
+            // 🔹 Ejecutar consulta
             var productos = await query.ToListAsync();
 
             // 🔽 Para los selects
             ViewBag.Categorias = _context.Categorias.ToList();
             ViewBag.Unidades = _context.UnidadMedida.ToList();
+
+            // 🔥 Para mantener selección en el combo
+            ViewBag.TopRegistro = topRegistro;
 
             return View(productos);
         }

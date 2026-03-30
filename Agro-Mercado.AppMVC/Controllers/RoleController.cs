@@ -1,5 +1,4 @@
-﻿using Agro_Mercado.AppMVC.Controllers;
-using Agro_Mercado.AppMVC.Models;
+﻿using Agro_Mercado.AppMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +13,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             _context = context;
         }
 
-        public IActionResult Index(Role? roleSearch, int topRegistro = 10)
+        public IActionResult Index(Role? roleSearch, int topRegistro = 5)
         {
             if (!TieneAcceso(1))
                 return RedirectToAction("Index", "Home");
@@ -28,12 +27,13 @@ namespace Agro_Mercado.AppMVC.Controllers
             if (!string.IsNullOrWhiteSpace(roleSearch.Nombre))
                 query = query.Where(r => r.Nombre.Contains(roleSearch.Nombre));
 
-            // 🔢 Orden + cantidad
-            query = query
-                .OrderByDescending(r => r.Id)
-                .Take(topRegistro);
+            // 🔥 CANTIDAD (0 = TODOS)
+            if (topRegistro > 0)
+                query = query.Take(topRegistro);
 
             var roles = query.ToList();
+
+            ViewBag.TopRegistro = topRegistro;
 
             return View(roles);
         }

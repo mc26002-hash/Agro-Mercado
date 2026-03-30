@@ -30,9 +30,40 @@
                             <span class="input-group-text bg-white">
                                 <i class="bi bi-list-ol text-primary"></i>
                             </span>
-                            <input type="number" name="topRegistro" class="form-control"
-                                   placeholder="Ej: 10"
-                                   value="@Context.Request.Query["topRegistro"]" />
+
+                            <select name="topRegistro" class="form-select">
+
+                                <option value="5"
+                                        selected="@(string.IsNullOrEmpty(Context.Request.Query["topRegistro"]) || Context.Request.Query["topRegistro"] == "5")">
+                                    5
+                                </option>
+
+                                <option value="10"
+                                        selected="@(Context.Request.Query["topRegistro"] == "10")">
+                                    10
+                                </option>
+
+                                <option value="20"
+                                        selected="@(Context.Request.Query["topRegistro"] == "20")">
+                                    20
+                                </option>
+
+                                <option value="50"
+                                        selected="@(Context.Request.Query["topRegistro"] == "50")">
+                                    50
+                                </option>
+
+                                <option value="100"
+                                        selected="@(Context.Request.Query["topRegistro"] == "100")">
+                                    100
+                                </option>
+
+                                <option value="0"
+                                        selected="@(Context.Request.Query["topRegistro"] == "0")">
+                                    Todos
+                                </option>
+
+                            </select>
                         </div>
                     </div>
 
@@ -47,7 +78,7 @@
                         </button>
 
                         <a asp-action="Index" class="btn btn-secondary px-4 shadow-sm">
-                            Limpiar
+                            <i class="bi bi-eraser me-2"></i>Limpiar
                         </a>
 
                         <a asp-action="Create" class="btn btn-success px-4 shadow-sm">

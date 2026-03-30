@@ -1,48 +1,70 @@
 ﻿@model Agro_Mercado.AppMVC.Models.Empleado
 
-<h2>Nuevo Empleado</h2>
 
-<form asp-action="Create" method="post">
+<div class="form-create-container">
 
-    <div class="mb-3">
-        <label>Nombre</label>
-        <input asp-for="Nombre" class="form-control" />
-        <span asp-validation-for="Nombre" class="text-danger"></span>
+    <div class="form-create-card">
+
+        <h4 class="titulo-agro mb-4">🌾 Nuevo Empleado</h4>
+
+        <form asp-action="Create" method="post">
+
+            <div class="row">
+
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Nombre</label>
+                    <input asp-for="Nombre" class="form-control input-agro" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Correo</label>
+                    <input asp-for="Correo" type="email" class="form-control input-agro" />
+                    <span asp-validation-for="Correo" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Contraseña</label>
+                    <input asp-for="Password" type="password" class="form-control input-agro" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Rol</label>
+                    <select asp-for="RolId" class="form-select input-agro"
+                            asp-items="@(new SelectList(ViewBag.Roles, "Id", "Nombre"))">
+                        <option value="">-- Seleccione un rol --</option>
+                    </select>
+                    <span asp-validation-for="RolId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Activo</label>
+                    <select asp-for="Activo" class="form-select input-agro">
+                        <option value="true">Activo</option>
+                        <option value="false">Inactivo</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+
+                <button type="submit" class="btn btn-success px-4">
+                    <i class="bi bi-plus-lg me-2"></i>Guardar
+                </button>
+
+                <a asp-action="Index" class="btn btn-secondary px-4">
+                    <i class="bi bi-x-circle me-2"></i>Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
     </div>
+</div>
 
-    <div class="mb-3">
-        <label>Correo</label>
-        <input asp-for="Correo" class="form-control" />
-        <span asp-validation-for="Correo" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label>Contraseña</label>
-        <input asp-for="Password" type="password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label>Rol</label>
-        <select asp-for="RolId" class="form-control"
-                asp-items="@(new SelectList(ViewBag.Roles, "Id", "Nombre"))">
-            <option value="">-- Seleccione un rol --</option>
-        </select>
-        <span asp-validation-for="RolId" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label>Activo</label>
-        <select asp-for="Activo" class="form-control">
-            <option value="true">Activo</option>
-            <option value="false">Inactivo</option>
-        </select>
-    </div>
-
-    <button type="submit" class="btn btn-success">Crear</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-
-</form>
 
 @section Scripts {
     @{

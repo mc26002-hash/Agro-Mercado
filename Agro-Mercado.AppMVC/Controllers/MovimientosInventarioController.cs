@@ -14,36 +14,39 @@ namespace Agro_Mercado.AppMVC.Controllers
             _context = context;
         }
 
-        public IActionResult Index(MovimientosInventario? movimientoSearch, int topRegistro = 10)
+        public IActionResult Index(MovimientosInventario? movimientoSearch, int topRegistro = 5)
         {
+            // 🔹 Evitar null
+            if (movimientoSearch == null)
+                movimientoSearch = new MovimientosInventario();
+
+            // 🔹 Query base
             var query = _context.MovimientosInventarios
                 .Include(m => m.Producto)
                 .AsQueryable();
 
-            if (movimientoSearch == null)
-                movimientoSearch = new MovimientosInventario();
-
-            // 🔍 Producto
+            // 🔍 FILTRO POR PRODUCTO
             if (movimientoSearch.ProductoId > 0)
                 query = query.Where(m => m.ProductoId == movimientoSearch.ProductoId);
 
-            // 🔍 Tipo de movimiento
+            // 🔍 FILTRO POR TIPO DE MOVIMIENTO
             if (!string.IsNullOrWhiteSpace(movimientoSearch.TipoMovimiento))
                 query = query.Where(m => m.TipoMovimiento.Contains(movimientoSearch.TipoMovimiento));
 
-            // 🔍 Cantidad
-            if (movimientoSearch.Cantidad > 0)
-                query = query.Where(m => m.Cantidad == movimientoSearch.Cantidad);
+            // 🔢 ORDENAR
+            query = query.OrderByDescending(m => m.Fecha);
 
-            // 🔢 Orden + cantidad
-            query = query
-                .OrderByDescending(m => m.Fecha)
-                .Take(topRegistro);
+            // 🔥 CANTIDAD (0 = TODOS)
+            if (topRegistro > 0)
+                query = query.Take(topRegistro);
 
             var movimientos = query.ToList();
 
-            // 🔽 Para el select de productos
+            // 🔽 Para el select
             ViewBag.Productos = _context.Productos.ToList();
+
+            // 🔥 Para mantener selección del combo
+            ViewBag.TopRegistro = topRegistro;
 
             return View(movimientos);
         }

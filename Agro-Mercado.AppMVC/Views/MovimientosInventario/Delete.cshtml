@@ -4,60 +4,48 @@
     ViewData["Title"] = "Eliminar Movimiento";
 }
 
-<h2>Eliminar Movimiento</h2>
+<div class="form-create-container">
+    <div class="form-create-card">
 
-<div class="alert alert-warning">
-    ⚠️ Esta acción afectará el stock del producto. ¿Deseas continuar?
-</div>
+        <h4 class="titulo-agro mb-4">🌾 Eliminar Movimiento</h4>
+        <div class="alert alert-warning">
+            ⚠️ Esta acción afectará el stock del producto. ¿Deseas continuar?
+        </div>
 
-<h4>¿Seguro que deseas eliminar este movimiento?</h4>
+        <form asp-action="Delete">
 
-<div>
+            <input type="hidden" asp-for="Id" />
 
-    <dl class="row">
+            <div>
 
-        <dt class="col-sm-3">
-            Producto
-        </dt>
-        <dd class="col-sm-9">
-            @Model.Producto.Nombre
-        </dd>
+                <div class="row">
 
-        <dt class="col-sm-3">
-            Tipo Movimiento
-        </dt>
-        <dd class="col-sm-9">
-            @Model.TipoMovimiento
-        </dd>
+                    <div class="col-md-12">
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <p><strong>Producto:</strong> @Model.Producto.Nombre</p>
+                                <p><strong>Tipo Movimiento:</strong> @Model.TipoMovimiento</p>
+                                <p><strong>Cantidad:</strong> @Model.Cantidad</p>
+                                <p><strong>Fecha:</strong> @Model.Fecha.ToString("dd/MM/yyyy HH:mm")</p>
 
-        <dt class="col-sm-3">
-            Cantidad
-        </dt>
-        <dd class="col-sm-9">
-            @Model.Cantidad
-        </dd>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
 
-        <dt class="col-sm-3">
-            Fecha
-        </dt>
-        <dd class="col-sm-9">
-            @Model.Fecha.ToString("dd/MM/yyyy HH:mm")
-        </dd>
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <button type="submit" class="btn btn-danger px-4">
+                    <i class="bi bi-trash me-2"></i> Eliminar
+                </button>
 
-    </dl>
+                <a asp-action="Index" class="btn btn-secondary px-4">
+                    <i class="bi bi-x-circle me-2"></i> Cancelar
+                </a>
+            </div>
 
-    <form asp-action="Delete">
+        </form>
 
-        <input type="hidden" asp-for="Id" />
-
-        <button type="submit" class="btn btn-danger">
-            Eliminar
-        </button>
-
-        <a asp-action="Index" class="btn btn-secondary">
-            Cancelar
-        </a>
-
-    </form>
-
+    </div>
 </div>

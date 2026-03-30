@@ -4,19 +4,25 @@
     ViewData["Title"] = "Datos del Negocio";
 }
 
-<h2>Datos del Negocio</h2>
+<div class="form-create-container">
+    <div class="form-create-card">
+        <h4 class="titulo-agro mb-4">🌾 Datos del Negocio</h4>
 
-<div class="card mt-3">
-    <div class="card-body">
+        <div class="card mt-3">
+            <div class="card-body">
 
-        <p><strong>Nombre:</strong> @Model.Nombre</p>
-        <p><strong>Dirección:</strong> @Model.Direccion</p>
-        <p><strong>Teléfono:</strong> @Model.Telefono</p>
-        <p><strong>Correo:</strong> @Model.Correo</p>
+                <p><strong>Nombre:</strong> @Model.Nombre</p>
+                <p><strong>Dirección:</strong> @Model.Direccion</p>
+                <p><strong>Teléfono:</strong> @Model.Telefono</p>
+                <p><strong>Correo:</strong> @Model.Correo</p>
 
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
-            Editar
-        </a>
-
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm px-4">
+                        <i class="bi bi-pencil-square me-2"></i>Editar
+                    </a>
+                </div>
+        
+            </div>
+        </div>
     </div>
 </div>

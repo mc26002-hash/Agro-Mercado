@@ -4,48 +4,35 @@
     ViewData["Title"] = "Detalle Movimiento";
 }
 
-<h2>Detalle del Movimiento</h2>
+<div class="form-create-container">
+    <div class="form-create-card">
 
-<div class="card">
-    <div class="card-body">
+        <h4 class="titulo-agro mb-4">🌾 Detalle del Movimiento</h4>
 
-        <dl class="row">
+        <div class="row">
+            <div class="col-md-12">
 
-            <dt class="col-sm-3">
-                Producto
-            </dt>
-            <dd class="col-sm-9">
-                @Model.Producto.Nombre
-            </dd>
+                <div class="card mt-3">
+                    <div class="card-body">
 
-            <dt class="col-sm-3">
-                Tipo Movimiento
-            </dt>
-            <dd class="col-sm-9">
-                @Model.TipoMovimiento
-            </dd>
+                        <p><strong>Producto:</strong> @Model.Producto.Nombre</p>
+                        <p><strong>Tipo Movimiento:</strong> @Model.TipoMovimiento</p>
+                        <p><strong>Cantidad:</strong> @Model.Cantidad</p>
+                        <p><strong>Fecha:</strong> @Model.Fecha.ToString("dd/MM/yyyy HH:mm")</p>
 
-            <dt class="col-sm-3">
-                Cantidad
-            </dt>
-            <dd class="col-sm-9">
-                @Model.Cantidad
-            </dd>
+                    </div>
+                </div>
 
-            <dt class="col-sm-3">
-                Fecha
-            </dt>
-            <dd class="col-sm-9">
-                @Model.Fecha.ToString("dd/MM/yyyy HH:mm")
-            </dd>
+            </div>
+        </div>
 
-        </dl>
+        <div class="d-flex justify-content-end gap-2 mt-4">
+
+            <a asp-action="Index" class="btn btn-secondary px-4">
+                <i class="bi bi-arrow-left me-2"></i>Volver
+            </a>
+
+        </div>
 
     </div>
 </div>
-
-<br />
-
-<a asp-action="Index" class="btn btn-secondary">
-    Volver
-</a>

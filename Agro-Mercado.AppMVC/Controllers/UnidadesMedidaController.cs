@@ -13,7 +13,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             _context = context;
         }
 
-        public IActionResult Index(UnidadMedidum? unidadSearch, int topRegistro = 10)
+        public IActionResult Index(UnidadMedidum? unidadSearch, int topRegistro = 5)
         {
             if (!TieneAcceso(1, 6, 8))
                 return RedirectToAction("Index", "Home");
@@ -33,14 +33,22 @@ namespace Agro_Mercado.AppMVC.Controllers
 
             // 🔍 Tipo
             if (!string.IsNullOrWhiteSpace(unidadSearch.Tipo))
-                query = query.Where(u => u.Tipo.Contains(unidadSearch.Tipo));
+                query = query.Where(u => u.Tipo == unidadSearch.Tipo);
 
-            // 🔢 Orden + cantidad
-            query = query
-                .OrderByDescending(u => u.Id)
-                .Take(topRegistro);
+            // 🔢 ORDEN
+            query = query.OrderByDescending(u => u.Id);
+
+            // 🔥 CANTIDAD (0 = TODOS)
+            if (topRegistro > 0)
+                query = query.Take(topRegistro);
 
             var lista = query.ToList();
+
+            // 🔥 IMPORTANTE (esto faltaba)
+            ViewBag.Tipos = _context.UnidadMedida
+                .Select(u => u.Tipo)
+                .Distinct()
+                .ToList();
 
             return View(lista);
         }

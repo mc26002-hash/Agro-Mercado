@@ -1,66 +1,73 @@
 ﻿@model Agro_Mercado.AppMVC.Models.Producto
 
-<h2>Editar Producto</h2>
+<div class="form-create-container">
+    <div class="form-create-card">
 
-<form asp-action="Edit" method="post">
+        <h4 class="titulo-agro mb-4">🌾 Editar Producto</h4>
 
-    <input type="hidden" asp-for="Id" />
+        <form asp-action="Edit" method="post">
 
-    <div class="mb-3">
-        <label>Nombre</label>
-        <input asp-for="Nombre" class="form-control" />
+            <input type="hidden" asp-for="Id" />
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label>Nombre</label>
+                    <input asp-for="Nombre" class="form-control" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Categoría</label>
+                    <select asp-for="CategoriaId" class="form-control"
+                            asp-items="@(new SelectList(ViewBag.Categorias, "Id", "Nombre", Model.CategoriaId))">
+                        <option value="">-- Seleccione categoría --</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Unidad de Medida</label>
+                    <select asp-for="UnidadMedidaId" class="form-control"
+                            asp-items="@(new SelectList(ViewBag.Unidades, "Id", "Nombre", Model.UnidadMedidaId))">
+                        <option value="">-- Seleccione unidad --</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Precio de Compra</label>
+                    <input asp-for="PrecioCompraPromedio" class="form-control" />
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Precio de Venta</label>
+                    <input asp-for="PrecioVenta" class="form-control" />
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Stock Mínimo</label>
+                    <input asp-for="StockMinimo" class="form-control" />
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Activo</label>
+                    <select asp-for="Activo" class="form-control">
+                        <option value="true">Activo</option>
+                        <option value="false">Inactivo</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <button type="submit" class="btn btn-warning px-4">
+                    <i class="bi bi-pencil-square me-2"></i>Guardar
+                </button>
+
+                <a asp-action="Index" class="btn btn-secondary px-4">
+                    <i class="bi bi-x-circle me-2"></i>Cancelar
+                </a>
+            </div>
+
+        </form>
+
     </div>
-
-    <div class="mb-3">
-        <label>Categoría</label>
-        <select asp-for="CategoriaId" class="form-control"
-                asp-items="@(new SelectList(ViewBag.Categorias, "Id", "Nombre", Model.CategoriaId))">
-            <option value="">-- Seleccione categoría --</option>
-        </select>
-    </div>
-
-    <div class="mb-3">
-        <label>Unidad de Medida</label>
-        <select asp-for="UnidadMedidaId" class="form-control"
-                asp-items="@(new SelectList(ViewBag.Unidades, "Id", "Nombre", Model.UnidadMedidaId))">
-            <option value="">-- Seleccione unidad --</option>
-        </select>
-    </div>
-
-    <div class="mb-3">
-        <label>Precio de Venta</label>
-        <input asp-for="PrecioVenta" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label>Precio Compra Promedio</label>
-        <input asp-for="PrecioCompraPromedio" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label>Stock</label>
-        <input asp-for="Stock" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label>Stock Mínimo</label>
-        <input asp-for="StockMinimo" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label>Activo</label>
-        <select asp-for="Activo" class="form-control">
-            <option value="true">Activo</option>
-            <option value="false">Inactivo</option>
-        </select>
-    </div>
-
-    <button type="submit" class="btn btn-warning">
-        Guardar
-    </button>
-
-    <a asp-action="Index" class="btn btn-secondary">
-        Cancelar
-    </a>
-
-</form>
+</div>

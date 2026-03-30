@@ -13,7 +13,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(Empleado? empleadoSearch, int topRegistro = 10)
+        public async Task<IActionResult> Index(Empleado? empleadoSearch, int topRegistro = 5)
         {
             if (!TieneAcceso(1))
                 return RedirectToAction("Index", "Home");
@@ -33,10 +33,12 @@ namespace Agro_Mercado.AppMVC.Controllers
             if (empleadoSearch.RolId > 0)
                 query = query.Where(e => e.RolId == empleadoSearch.RolId);
 
-            // 🔢 Orden + cantidad (CORRECTO)
-            query = query
-                .OrderByDescending(e => e.Id)
-                .Take(topRegistro);
+            // 🔢 Orden
+            query = query.OrderByDescending(e => e.Id);
+
+            // 🔥 NUEVO: manejar "Todos"
+            if (topRegistro > 0)
+                query = query.Take(topRegistro);
 
             var empleados = await query.ToListAsync();
 

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Agro_Mercado.AppMVC.Models;  // verifica que coincida con tu namespace
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq;
-using Agro_Mercado.AppMVC.Models;  // verifica que coincida con tu namespace
 
 public class AccountController : Controller
 {
@@ -12,13 +12,17 @@ public class AccountController : Controller
         _context = context;
     }
 
-
+    // ===============================
+    // 1. Mostrar vista Login (GET)
+    // ===============================
     public IActionResult Login()
     {
         return View();
     }
 
-
+    // ===============================
+    // 2. Procesar Login (POST)
+    // ===============================
     [HttpPost]
     public IActionResult Login(string correo, string password)
     {
@@ -28,7 +32,12 @@ public class AccountController : Controller
         if (usuario != null)
         {
             HttpContext.Session.SetString("Usuario", usuario.Nombre);
-            HttpContext.Session.SetInt32("RolId", usuario.RolId);
+
+            // 🔥 Validar nullable
+            if (usuario.RolId.HasValue)
+            {
+                HttpContext.Session.SetInt32("RolId", usuario.RolId.Value);
+            }
 
             return RedirectToAction("Index", "Home");
         }
@@ -37,7 +46,9 @@ public class AccountController : Controller
         return View();
     }
 
-
+    // ===============================
+    // 3. Cerrar sesión
+    // ===============================
 
     public IActionResult Logout()
     {

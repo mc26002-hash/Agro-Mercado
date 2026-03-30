@@ -13,7 +13,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(Categoria? categoriaSearch, int topRegistro = 10)
+        public async Task<IActionResult> Index(Categoria? categoriaSearch, int topRegistro = 5)
         {
             if (!TieneAcceso(1, 6, 8))
                 return RedirectToAction("Index", "Home");
@@ -36,9 +36,11 @@ namespace Agro_Mercado.AppMVC.Controllers
             if (Request.Query["estado"] == "false")
                 query = query.Where(c => c.Estado == false);
 
-            query = query
-                .OrderByDescending(c => c.Id)
-                .Take(topRegistro);
+            query = query.OrderByDescending(c => c.Id);
+
+            // 🔥 CANTIDAD (0 = TODOS)
+            if (topRegistro > 0)
+                query = query.Take(topRegistro);
 
             var lista = await query.ToListAsync();
 

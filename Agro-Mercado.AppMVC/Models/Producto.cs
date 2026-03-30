@@ -14,15 +14,15 @@ public partial class Producto
     public string Nombre { get; set; } = null!;
 
     [Required(ErrorMessage = "Debe seleccionar una categoría")]
-    public int CategoriaId { get; set; }
+    public int? CategoriaId { get; set; }
 
     [Required(ErrorMessage = "Debe seleccionar una unidad de medida")]
-    public int UnidadMedidaId { get; set; }
+    public int? UnidadMedidaId { get; set; }
 
     [Required(ErrorMessage = "El precio de venta es obligatorio")]
     [Range(0.01, 100000, ErrorMessage = "El precio debe ser mayor que 0")]
     [Column(TypeName = "decimal(18,2)")]
-    public decimal PrecioVenta { get; set; }
+    public decimal? PrecioVenta { get; set; }
 
     [Range(0, int.MaxValue, ErrorMessage = "El stock no puede ser negativo")]
     public int? Stock { get; set; }
@@ -36,6 +36,8 @@ public partial class Producto
     [DataType(DataType.Date)]
     public DateTime? FechaRegistro { get; set; }
 
+    [Required(ErrorMessage = "El precio de compra es obligatorio")]
+    [Range(0.01, 100000, ErrorMessage = "El precio debe ser mayor que 0")]
     [Column(TypeName = "decimal(18,2)")]
     public decimal? PrecioCompraPromedio { get; set; }
 
