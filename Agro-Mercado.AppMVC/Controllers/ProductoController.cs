@@ -57,6 +57,13 @@ namespace Agro_Mercado.AppMVC.Controllers
             // 🔥 Para mantener selección en el combo
             ViewBag.TopRegistro = topRegistro;
 
+            // 🔥 ALERTAS (seguro contra null)
+            var productosBajoStock = await _context.Productos
+                .Where(p => (p.Stock ?? 0) <= (p.StockMinimo ?? 0) && p.Activo == true)
+                .ToListAsync();
+
+            ViewBag.ProductosBajoStock = productosBajoStock;
+
             return View(productos);
         }
 
@@ -72,7 +79,6 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View();
         }
 
-        // CREAR POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Producto producto)
@@ -85,8 +91,12 @@ namespace Agro_Mercado.AppMVC.Controllers
 
             if (ModelState.IsValid)
             {
+                // 🔥 Fecha automática
                 if (producto.FechaRegistro == null)
                     producto.FechaRegistro = DateTime.Now;
+
+                // 🔥 Stock inicia en 0
+                producto.Stock = 0;
 
                 _context.Productos.Add(producto);
                 await _context.SaveChangesAsync();
@@ -94,6 +104,7 @@ namespace Agro_Mercado.AppMVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            // 🔽 Si falla validación, recargar combos
             ViewBag.Categorias = _context.Categorias.ToList();
             ViewBag.Unidades = _context.UnidadMedida.ToList();
 
@@ -133,18 +144,25 @@ namespace Agro_Mercado.AppMVC.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(producto);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Productos.Any(e => e.Id == producto.Id))
-                        return NotFound();
-                    else
-                        throw;
-                }
+                var productoBD = await _context.Productos.FindAsync(id);
+
+                if (productoBD == null)
+                    return NotFound();
+
+                // 🔥 SOLO ACTUALIZAS LO QUE DEBE CAMBIAR
+                productoBD.Nombre = producto.Nombre;
+                productoBD.CategoriaId = producto.CategoriaId;
+                productoBD.UnidadMedidaId = producto.UnidadMedidaId;
+                productoBD.PrecioVenta = producto.PrecioVenta;
+                productoBD.PrecioCompraPromedio = producto.PrecioCompraPromedio;
+                productoBD.StockMinimo = producto.StockMinimo;
+                productoBD.Activo = producto.Activo;
+
+                // ❌ NO TOCAR ESTO:
+                // productoBD.Stock
+                // productoBD.FechaRegistro
+
+                await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
@@ -173,7 +191,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         }
 
         // DELETE GET
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (!TieneAcceso(1))
                 return RedirectToAction("Index", "Home");
@@ -206,6 +224,21 @@ namespace Agro_Mercado.AppMVC.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Alertas()
+        {
+            if (!TieneAcceso(1))
+                return RedirectToAction("Index", "Home");
+
+            var productosBajoStock = await _context.Productos
+                .Include(p => p.Categoria)
+                .Include(p => p.UnidadMedida)
+                .Where(p => p.Stock <= p.StockMinimo && p.Activo == true)
+                .OrderBy(p => p.Stock)
+                .ToListAsync();
+
+            return View(productosBajoStock);
         }
     }
 }

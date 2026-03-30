@@ -29,6 +29,7 @@ public partial class Producto
 
     public bool? Activo { get; set; }
 
+    [Required(ErrorMessage = "Debe definir un stock mínimo")]
     [Range(0, int.MaxValue, ErrorMessage = "El stock mínimo no puede ser negativo")]
     public int? StockMinimo { get; set; }
 

@@ -125,7 +125,7 @@
         <tr>
             <th>Nombre</th>
             <th>Descripción</th>
-            <th>Estado</th>
+            <th>Activo</th>
             <th style="width:220px;">Acciones</th>
         </tr>
     </thead>
@@ -136,7 +136,14 @@
                 <td>@item.Nombre</td>
                 <td>@item.Descripcion</td>
                 <td>
-                    @(item.Estado ? "Activa" : "Inactiva")
+                    @if (item.Estado == true)
+                    {
+                        <span class="badge bg-success">Activo</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Inactivo</span>
+                    }
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Ver</a>

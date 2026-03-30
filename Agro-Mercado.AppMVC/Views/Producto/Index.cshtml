@@ -1,5 +1,23 @@
 ﻿@model IEnumerable<Agro_Mercado.AppMVC.Models.Producto>
 
+@if (ViewBag.ProductosBajoStock != null && ViewBag.ProductosBajoStock.Count > 0)
+{
+    <div class="alert alert-warning d-flex justify-content-between align-items-center shadow-sm">
+
+        <div>
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <strong>Atención:</strong> Hay
+            <strong>@ViewBag.ProductosBajoStock.Count</strong> productos con stock bajo.
+        </div>
+
+        <a asp-controller="Producto" asp-action="Alertas"
+               class="btn btn-sm btn-outline-dark">
+            Ver productos
+        </a>
+
+    </div>
+}
+
 <h2>Productos</h2>
 
 <div class="container mt-4">
@@ -145,6 +163,7 @@
             <th>Stock Mínimo</th>
             <th>Fecha Registro</th>
             <th>Activo</th>
+            <th>Estado Stock</th>
             <th style="width:240px;">Acciones</th>
         </tr>
     </thead>
@@ -152,21 +171,59 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+            var bajoStock = (item.Stock ?? 0) <= (item.StockMinimo ?? 0);
+
+            <tr class="@(bajoStock ? "table-danger" : "")">
+
                 <td>@item.Nombre</td>
+
                 <td>@item.Categoria?.Nombre</td>
+
                 <td>@item.UnidadMedida?.Nombre</td>
-                <td>@item.PrecioVenta</td>
-                <td>@item.PrecioCompraPromedio</td>
-                <td>@item.Stock</td>
-                <td>@item.StockMinimo</td>
+
+                <td>$@item.PrecioVenta?.ToString("0.00")</td>
+
+                <td>$@item.PrecioCompraPromedio?.ToString("0.00")</td>
+
+                <td>@(item.Stock ?? 0)</td>
+
+                <td>@(item.StockMinimo ?? 0)</td>
+
                 <td>@item.FechaRegistro?.ToString("dd/MM/yyyy")</td>
-                <td>@(item.Activo == true ? "Sí" : "No")</td>
+
+                <td>
+                    @if (item.Activo == true)
+                    {
+                        <span class="badge bg-success">Activo</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Inactivo</span>
+                    }
+                </td>
+
+                <!-- 🔥 NUEVO: ESTADO DE INVENTARIO -->
+                <td>
+                    @if (bajoStock)
+                    {
+                        <span class="badge bg-danger">
+                            <i class="bi bi-exclamation-triangle"></i> Bajo
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">
+                            <i class="bi bi-check-circle"></i> OK
+                        </span>
+                    }
+                </td>
+
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Ver</a>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Editar</a>
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Eliminar</a>
                 </td>
+
             </tr>
         }
     </tbody>
