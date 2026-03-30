@@ -4,6 +4,14 @@
     var rolId = Context.Session.GetInt32("RolId");
 }
 
+@{
+    var productosBajoStock = _context.Productos
+        .Where(p => p.Stock <= p.StockMinimo && p.Activo == true)
+        .ToList();
+
+    var totalAlertas = productosBajoStock.Count;
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -134,7 +142,68 @@
                 <i class="bi bi-arrow-left-right"></i> Movimientos
             </a>
         }
+        @if (rolId == 1)
+        {
+            @* 🔔 ALERTAS *@
+            <div class="px-3 mb-3">
+                <div class="dropdown">
 
+                    <a class="btn btn-success w-100 dropdown-toggle fw-bold"
+                           href="#" role="button" data-bs-toggle="dropdown">
+
+                        <i class="bi bi-bell-fill"></i> Alertas
+
+                        @if (totalAlertas > 0)
+                        {
+                            <span class="badge bg-danger ms-2">@totalAlertas</span>
+                        }
+                    </a>
+
+                    <ul class="dropdown-menu w-100">
+
+                        @if (totalAlertas == 0)
+                        {
+                            <li class="dropdown-item text-muted">
+                                <i class="bi bi-check-circle me-2"></i>
+                                Sin alertas
+                            </li>
+                        }
+                        else
+                        {
+                            @foreach (var item in productosBajoStock.Take(5))
+                            {
+                                <li>
+                                    <a class="dropdown-item text-dark custom-item"
+                                           asp-controller="Producto"
+                                           asp-action="Details"
+                                           asp-route-id="@item.Id">
+
+                                        ⚠️ @item.Nombre
+                                        <br />
+                                        <small class="text-secondary">
+                                            Stock: @item.Stock | Mín: @item.StockMinimo
+                                        </small>
+                                    </a>
+                                </li>
+                            }
+
+                            <li><hr class="dropdown-divider" /></li>
+
+                            <li>
+                                <a class="dropdown-item text-center text-primary fw-bold"
+                                       asp-controller="Producto"
+                                       asp-action="Alertas">
+
+                                    <i class="bi bi-eye"></i> Ver todos
+                                </a>
+                            </li>
+                        }
+
+                    </ul>
+
+                </div>
+            </div>
+        }
         <hr style="border-color: rgba(255,255,255,0.3)" />
 
         @if (Context.Session.GetString("Usuario") != null)
