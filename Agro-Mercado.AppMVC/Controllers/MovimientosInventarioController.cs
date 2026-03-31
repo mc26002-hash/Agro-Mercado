@@ -62,6 +62,11 @@ namespace Agro_Mercado.AppMVC.Controllers
                 "Nombre"
             );
 
+            ViewBag.Motivos = new SelectList(new List<string>
+    {
+        "Stock inicial"
+    });
+
             return View();
         }
 
@@ -70,10 +75,13 @@ namespace Agro_Mercado.AppMVC.Controllers
         // ============================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CrearEntradaInicial(int productoId, int cantidad)
+        public IActionResult CrearEntradaInicial(int productoId, int cantidad, string motivo)
         {
             if (cantidad <= 0)
                 ModelState.AddModelError("", "La cantidad debe ser mayor a 0");
+
+            if (string.IsNullOrWhiteSpace(motivo))
+                ModelState.AddModelError("Motivo", "El motivo es obligatorio");
 
             var existe = _context.MovimientosInventarios
                 .Any(m => m.ProductoId == productoId && m.TipoMovimiento == "Entrada Inicial");
@@ -101,6 +109,7 @@ namespace Agro_Mercado.AppMVC.Controllers
                 ProductoId = productoId,
                 TipoMovimiento = "Entrada Inicial",
                 Cantidad = cantidad,
+                Motivo = motivo, // 🔥 IMPORTANTE
                 Fecha = DateTime.Now
             };
 
@@ -121,6 +130,13 @@ namespace Agro_Mercado.AppMVC.Controllers
                 "Nombre"
             );
 
+            ViewBag.Motivos = new SelectList(new List<string>
+    {
+        "Compra a proveedor",
+    "Ingreso manual",
+    "Ajuste positivo de inventario"
+    });
+
             return View();
         }
 
@@ -129,10 +145,13 @@ namespace Agro_Mercado.AppMVC.Controllers
         // ============================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CrearEntrada(int productoId, int cantidad)
+        public IActionResult CrearEntrada(int productoId, int cantidad, string motivo)
         {
             if (cantidad <= 0)
                 ModelState.AddModelError("", "Cantidad inválida");
+
+            if (string.IsNullOrWhiteSpace(motivo))
+                ModelState.AddModelError("Motivo", "El motivo es obligatorio");
 
             if (!ModelState.IsValid)
             {
@@ -147,13 +166,16 @@ namespace Agro_Mercado.AppMVC.Controllers
             var producto = _context.Productos.Find(productoId);
             if (producto == null) return NotFound();
 
+            // SUMAR STOCK
             producto.Stock = (producto.Stock ?? 0) + cantidad;
 
+            // CREAR MOVIMIENTO
             var movimiento = new MovimientosInventario
             {
                 ProductoId = productoId,
                 TipoMovimiento = "Entrada",
                 Cantidad = cantidad,
+                Motivo = motivo, // 🔥 IMPORTANTE
                 Fecha = DateTime.Now
             };
 
@@ -174,6 +196,15 @@ namespace Agro_Mercado.AppMVC.Controllers
                 "Nombre"
             );
 
+            ViewBag.Motivos = new SelectList(new List<string>
+    {
+        "Venta",
+    "Producto dañado",
+    "Producto vencido",
+    "Pérdida o robo",
+    "Ajuste negativo de inventario"
+    });
+
             return View();
         }
 
@@ -182,16 +213,19 @@ namespace Agro_Mercado.AppMVC.Controllers
         // ============================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CrearSalida(int productoId, int cantidad)
+        public IActionResult CrearSalida(int productoId, int cantidad, string motivo)
         {
             if (cantidad <= 0)
                 ModelState.AddModelError("", "Cantidad inválida");
+
+            if (string.IsNullOrWhiteSpace(motivo))
+                ModelState.AddModelError("Motivo", "El motivo es obligatorio");
 
             var producto = _context.Productos.Find(productoId);
             if (producto == null) return NotFound();
 
             if ((producto.Stock ?? 0) < cantidad)
-                ModelState.AddModelError("", "Stock insuficiente");
+                ModelState.AddModelError("", "No hay suficiente stock");
 
             if (!ModelState.IsValid)
             {
@@ -210,6 +244,7 @@ namespace Agro_Mercado.AppMVC.Controllers
                 ProductoId = productoId,
                 TipoMovimiento = "Salida",
                 Cantidad = cantidad,
+                Motivo = motivo, // 🔥 IMPORTANTE
                 Fecha = DateTime.Now
             };
 
