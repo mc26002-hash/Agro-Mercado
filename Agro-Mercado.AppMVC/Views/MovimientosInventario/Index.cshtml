@@ -146,6 +146,7 @@
             <th>Tipo Movimiento</th>
             <th>Cantidad</th>
             <th>Fecha</th>
+            <th>Motivo</th>
             <th></th>
         </tr>
     </thead>
@@ -168,6 +169,7 @@
                     <td>@item.TipoMovimiento</td>
                     <td>@item.Cantidad</td>
                     <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@item.Motivo</td>
 
                     <td>
                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
