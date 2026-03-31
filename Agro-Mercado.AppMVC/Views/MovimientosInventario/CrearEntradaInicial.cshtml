@@ -2,23 +2,26 @@
     ViewData["Title"] = "Registrar Stock Inicial";
 }
 
-@if (!ViewData.ModelState.IsValid)
-{
-    <div class="alert alert-danger">
-        <div asp-validation-summary="All"></div>
-    </div>
-}
+
 
 <div class="form-create-container">
     <div class="form-create-card">
 
         <h4 class="titulo-agro mb-4">🌾 Registrar Stock Inicial</h4>
-
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                <div asp-validation-summary="All"></div>
+            </div>
+        }
         <div class="alert alert-info">
             Este proceso solo se puede realizar una vez por producto.
         </div>
 
         <form asp-action="CrearEntradaInicial" method="post">
+
+            @Html.AntiForgeryToken()
+
             <div class="row">
 
                 <div class="col-md-7 form-group">
@@ -31,6 +34,13 @@
                 <div class="col-md-5 form-group">
                     <label>Cantidad Inicial</label>
                     <input type="number" name="cantidad" class="form-control" min="1" required />
+                </div>
+
+                <div class="col-md-7 mb-3">
+                    <label>Motivo</label>
+                    <select name="motivo" class="form-control" asp-items="ViewBag.Motivos">
+                        <option value="">-- Seleccione motivo --</option>
+                    </select>
                 </div>
 
             </div>
