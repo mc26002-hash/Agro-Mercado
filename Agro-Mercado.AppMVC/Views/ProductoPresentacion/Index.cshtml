@@ -1,5 +1,146 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model IEnumerable<Agro_Mercado.AppMVC.Models.ProductoPresentacion>
+
+<h2>Presentaciones de Producto</h2>
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Buscar Presentaciones</h5>
+
+            <form asp-action="Index" method="get">
+                <div class="row g-3 align-items-end">
+
+                    <!-- 🔍 Producto -->
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold text-muted small">Producto</label>
+                        <select name="ProductoId" class="form-select">
+                            <option value="0">Todos</option>
+                            @foreach (var item in ViewBag.Productos)
+                            {
+                                <option value="@item.Id">
+                                    @item.Nombre
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- 🔍 Nombre -->
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold text-muted small">Nombre</label>
+                        <input type="text" name="Nombre" class="form-control"
+                               placeholder="Caja, Saco..."
+                               value="@Context.Request.Query["Nombre"]" />
+                    </div>
+
+                    <!-- 🔍 Tipo -->
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold text-muted small">Tipo</label>
+                        <select name="Tipo" class="form-select">
+                            <option value="">Todos</option>
+                            <option value="Compra">Compra</option>
+                            <option value="Venta">Venta</option>
+                        </select>
+                    </div>
+
+                    <!-- 🔢 Cantidad -->
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold text-muted small">Cantidad</label>
+                        <select name="topRegistro" class="form-select">
+
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="0">Todos</option>
+
+                        </select>
+                    </div>
+
+                </div>
+
+                <!-- 🔘 Botones -->
+                <div class="row mt-4">
+                    <div class="col-12 d-flex gap-2">
+
+                        <button type="submit" class="btn btn-primary px-4">
+                            Buscar
+                        </button>
+
+                        <a asp-action="Index" class="btn btn-secondary px-4">
+                            Limpiar
+                        </a>
+
+                        <a asp-action="Create" class="btn btn-success px-4">
+                            Nueva Presentación
+                        </a>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered mt-4">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Equivalencia</th>
+            <th>Estado</th>
+            <th style="width: 240px;">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Producto?.Nombre</td>
+
+                <td>@item.Nombre</td>
+
+                <td>
+                    @if (item.Tipo == "Compra")
+                    {
+                        <span class="badge bg-primary">Compra</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">Venta</span>
+                    }
+                </td>
+
+                <td>
+                    @item.Equivalencia
+                </td>
+
+                <td>
+                    @if (item.Activo)
+                    {
+                        <span class="badge bg-success">Activo</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Inactivo</span>
+                    }
+                </td>
+
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
+                        Ver
+                    </a>
+
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                        Editar
+                    </a>
+
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                        Eliminar
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
