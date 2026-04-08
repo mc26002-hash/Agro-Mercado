@@ -139,7 +139,7 @@
     </div>
 </div>
 
-<table class="table table-striped mt-4">
+<table class="table table-bordered mt-4">
     <thead>
         <tr>
             <th>Producto</th>
@@ -167,7 +167,21 @@
                 <tr>
                     <td>@item.Producto.Nombre</td>
                     <td>@item.TipoMovimiento</td>
-                    <td>@item.Cantidad</td>
+                    <td>
+                        @if (item.ProductoPresentacion != null)
+                        {
+                            var unidades = item.Cantidad * item.ProductoPresentacion.Equivalencia;
+                            var nombre = item.Cantidad == 1
+                                ? item.ProductoPresentacion.Nombre
+                                : item.ProductoPresentacion.Nombre + "s";
+
+                            @($"{item.Cantidad.ToString("0.##")} {nombre} ({unidades.ToString("0.##")} unidades)")
+                        }
+                        else
+                        {
+                            @($"{item.Cantidad.ToString("0.##")} unidades")
+                        }
+                    </td>
                     <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@item.Motivo</td>
 
