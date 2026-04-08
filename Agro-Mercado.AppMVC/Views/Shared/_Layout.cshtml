@@ -41,7 +41,7 @@
                 width: 240px;
                 height: 100vh;
                 position: fixed;
-                background: linear-gradient(180deg, #2e7d32, #1b5e20);
+                background: #2e7d32;
                 color: white;
                 padding-top: 20px;
             }
@@ -52,20 +52,28 @@
                     margin-bottom: 30px;
                 }
 
-                .sidebar a {
+                /* LINKS GENERALES DEL SIDEBAR */
+                .sidebar a,
+                .menu-opciones a {
                     display: block;
                     color: white;
                     padding: 12px 20px;
                     text-decoration: none;
-                    transition: 0.3s;
+                    border-radius: 5px;
+                    transition: all 0.3s ease;
                 }
 
-                    .sidebar a:hover {
+                    /* HOVER UNIFICADO */
+                    .sidebar a:hover,
+                    .menu-opciones a:hover,
+                    .menu-titulo:hover {
                         background-color: rgba(255,255,255,0.15);
                         padding-left: 25px;
                     }
 
-                .sidebar i {
+                /* ICONOS */
+                .sidebar i,
+                .menu-opciones i {
                     margin-right: 10px;
                 }
 
@@ -93,6 +101,45 @@
                 text-align: center;
                 color: gray;
             }
+
+            /* MENÚ MODULAR */
+            .menu-modulo {
+                margin-bottom: 10px;
+            }
+
+            /* BOTÓN DE MÓDULO */
+            .menu-titulo {
+                width: 100%;
+                background: #2e7d32;
+                color: white;
+                border: none;
+                padding: 12px 20px;
+                text-align: left;
+                font-weight: bold;
+                cursor: pointer;
+                border-radius: 5px;
+                transition: all 0.3s ease;
+            }
+
+            /* CONTENIDO DEL MÓDULO */
+            .menu-opciones {
+                display: none;
+                flex-direction: column;
+                background: #1b5e20;
+                padding: 10px;
+                border-radius: 5px;
+                margin-top: 5px;
+            }
+
+                /* LINKS DENTRO DEL MÓDULO */
+                .menu-opciones a {
+                    padding: 10px;
+                }
+
+                    /* HOVER MÁS SUAVE PARA OPCIONES */
+                    .menu-opciones a:hover {
+                        background-color: rgba(255,255,255,0.2);
+                    }
     </style>
 </head>
 
@@ -101,54 +148,107 @@
     <!-- 🌱 SIDEBAR -->
     <div class="sidebar">
         <h4>🌾 AgroMercado</h4>
-
+        
         <a asp-controller="Home" asp-action="Index">
             <i class="bi bi-house"></i> Inicio
         </a>
-
+        
+        <!-- 👥 GESTIÓN DE PERSONAS -->
         @if (rolId == 1)
         {
-            <a asp-controller="Empleado" asp-action="Index">
-                <i class="bi bi-people"></i> Empleados
-            </a>
+            <div class="menu-modulo">
+                <button class="menu-titulo">
+                    <i class="bi bi-person-badge"></i>
+                    Gestión de Personas
+                </button>
 
-            <a asp-controller="Role" asp-action="Index">
-                <i class="bi bi-person-badge"></i> Roles
-            </a>
+                <div class="menu-opciones">
+                    <a asp-controller="Empleado" asp-action="Index">
+                        Empleados
+                    </a>
 
-            <a asp-controller="DatosNegocio" asp-action="Index">
-                <i class="bi bi-gear"></i> Configuración
-            </a>
+                    <a asp-controller="Role" asp-action="Index">
+                        Roles
+                    </a>
+                </div>
+            </div>
         }
 
+        <!-- 📦 INVENTARIO -->
         @if (rolId == 1 || rolId == 6 || rolId == 8)
         {
-            <a asp-controller="Categorias" asp-action="Index">
-                <i class="bi bi-tags"></i> Categorías
-            </a>
+            <div class="menu-modulo">
+                <button class="menu-titulo">
+                    <i class="bi bi-box-seam"></i> Inventario
+                </button>
 
-            <a asp-controller="UnidadesMedida" asp-action="Index">
-                <i class="bi bi-rulers"></i> Unidades
-            </a>
+                <div class="menu-opciones">
+                    <a asp-controller="Categorias" asp-action="Index">
+                        Categorías
+                    </a>
+
+                    <a asp-controller="UnidadesMedida" asp-action="Index">
+                        Unidades
+                    </a>
+
+                    <a asp-controller="Producto" asp-action="Index">
+                        Productos
+                    </a>
+
+                    <a asp-controller="MovimientosInventario" asp-action="Index">
+                        Movimientos
+                    </a>
+
+                    <a asp-controller="ProductoPresentacion" asp-action="Index">
+                        Presentación Producto
+                    </a>
+                </div>
+            </div>
         }
 
+        <!-- 📦 COMERCIAL -->
+        @if (rolId == 1 || rolId == 6 || rolId == 8)
+        {
+            <div class="menu-modulo">
+                <button class="menu-titulo">
+                    <i class="bi bi-cart"></i> Gestión Comercial
+                </button>
+
+                <div class="menu-opciones">
+                    <a asp-controller="Proveedore" asp-action="Index">
+                        Proveedores
+                    </a>
+
+                    <a asp-controller="Compra" asp-action="Index">
+                        Compras
+                    </a>
+                </div>
+            </div>
+        }
+
+        <!-- ⚙️ CONFIGURACIÓN -->
         @if (rolId == 1)
         {
-            <a asp-controller="Producto" asp-action="Index">
-                <i class="bi bi-box-seam"></i> Productos
-            </a>
+            <div class="menu-modulo">
+                <button class="menu-titulo">
+                    <i class="bi bi-gear"></i> Configuración
+                </button>
 
-            <a asp-controller="MovimientosInventario" asp-action="Index">
-                <i class="bi bi-arrow-left-right"></i> Movimientos
-            </a>
+                <div class="menu-opciones">
+                    <a asp-controller="DatosNegocio" asp-action="Index">
+                        Configuración
+                    </a>
+                </div>
+            </div>
         }
+
         @if (rolId == 1)
         {
             @* 🔔 ALERTAS *@
             <div class="px-3 mb-3">
                 <div class="dropdown">
 
-                    <a class="btn btn-success w-100 dropdown-toggle fw-bold"
+                    <a class="btn w-100 dropdown-toggle fw-bold"
                            href="#" role="button" data-bs-toggle="dropdown">
 
                         <i class="bi bi-bell-fill"></i> Alertas
@@ -231,4 +331,13 @@
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>
-</html> 
+</html>
+<script>
+    document.querySelectorAll(".menu-titulo").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const opciones = btn.nextElementSibling;
+            opciones.style.display =
+                opciones.style.display === "flex" ? "none" : "flex";
+        });
+    });
+</script>

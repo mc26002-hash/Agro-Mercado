@@ -97,6 +97,7 @@
     <thead>
         <tr>
             <th>Nombre</th>
+            <th>Descripción</th>
             <th style="width:220px;">Acciones</th>
         </tr>
     </thead>
@@ -105,6 +106,10 @@
         {
             <tr>
                 <td>@item.Nombre</td>
+
+                <!-- 🔥 NUEVA COLUMNA -->
+                <td>@item.Descripcion</td>
+
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Detalle</a>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Editar</a>
