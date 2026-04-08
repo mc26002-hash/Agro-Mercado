@@ -1,5 +1,98 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model Agro_Mercado.AppMVC.Models.Compra
+
+<div class="agrocmp-container">
+
+    <h2 class="agrocmp-title text-danger text-center mb-3">⚠️ Eliminar Compra</h2>
+
+    <h4 class="text-center mb-4">¿Estás seguro que deseas eliminar esta compra?</h4>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="agrocmp-card mb-3">
+                <p><span class="agrocmp-label">Proveedor:</span> @Model.Proveedor?.Nombre</p>
+                <p><span class="agrocmp-label">Empleado:</span> @Model.Empleado?.Nombre</p>
+                <p>
+                    <span class="agrocmp-label">Fecha:</span>
+                    @(Model.Fecha.HasValue
+                        ? Model.Fecha.Value.ToString("dd/MM/yyyy HH:mm")
+                        : "")
+                </p>
+                <p>
+                    <span class="agrocmp-label">Total:</span>
+                    <span class="fw-bold text-success">
+                        $@(Model.Total.HasValue
+                                                                            ? Model.Total.Value.ToString("0.00")
+                                                                    : "0.00")
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <h5 class="agrocmp-title mb-3">🛒 Productos de la compra</h5>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="agrocmp-card">
+                <table class="table table-bordered agrocmp-table text-center align-middle">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>SubTotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.DetalleCompras)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@item.Producto?.Nombre</td>
+
+                                <td>
+                                    @if (item.ProductoPresentacion != null)
+                                    {
+                                        var unidades = item.Cantidad * item.ProductoPresentacion.Equivalencia;
+
+                                        @($"{item.Cantidad.ToString("0.##")} {item.ProductoPresentacion.Nombre} ({unidades.ToString("0.##")} unidades)")
+                                    }
+                                    else
+                                    {
+                                        @($"{item.Cantidad.ToString("0.##")} unidades")
+                                    }
+                                </td>
+
+                                <td>$@item.Precio.ToString("0.00")</td>
+
+                                <td class="fw-bold text-success">
+                                    $@(item.SubTotal.HasValue
+                                                                                                                ? item.SubTotal.Value.ToString("0.00")
+                                                                                                        : "0.00")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <form asp-action="DeleteConfirmed" method="post" class="mt-3 text-end">
+        <input type="hidden" asp-for="Id" />
+
+        <button type="submit" class="btn btn-danger me-2">
+            <i class="bi bi-trash"></i> Eliminar
+        </button>
+
+        <a asp-action="Index" class="btn agrocmp-btn">
+            Cancelar
+        </a>
+    </form>
+
+</div>
