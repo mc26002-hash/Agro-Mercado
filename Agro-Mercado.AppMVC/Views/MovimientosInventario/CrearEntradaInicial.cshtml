@@ -32,6 +32,17 @@
                 </div>
 
                 <div class="col-md-5 form-group">
+                    <label>Presentación</label>
+                    <select name="productoPresentacionId" class="form-control">
+                        <option value="">Seleccione</option>
+                        @foreach (var p in ViewBag.Presentaciones)
+                        {
+                            <option value="@p.Id">@p.Nombre</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-5 form-group">
                     <label>Cantidad Inicial</label>
                     <input type="number" name="cantidad" class="form-control" min="1" required />
                 </div>
