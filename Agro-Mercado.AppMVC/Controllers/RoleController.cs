@@ -13,6 +13,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             _context = context;
         }
 
+        // 🔹 INDEX
         public IActionResult Index(Role? roleSearch, int topRegistro = 5)
         {
             if (!TieneAcceso(1))
@@ -23,11 +24,11 @@ namespace Agro_Mercado.AppMVC.Controllers
 
             var query = _context.Roles.AsQueryable();
 
-            // 🔍 Nombre
+            // 🔍 Filtro por nombre
             if (!string.IsNullOrWhiteSpace(roleSearch.Nombre))
                 query = query.Where(r => r.Nombre.Contains(roleSearch.Nombre));
 
-            // 🔥 CANTIDAD (0 = TODOS)
+            // 🔥 Límite de registros
             if (topRegistro > 0)
                 query = query.Take(topRegistro);
 
@@ -38,7 +39,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(roles);
         }
 
-        // CREAR GET
+        // 🔹 CREATE GET
         public IActionResult Create()
         {
             if (!TieneAcceso(1))
@@ -47,7 +48,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View();
         }
 
-        // CREAR POST
+        // 🔹 CREATE POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Role role)
@@ -65,20 +66,21 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(role);
         }
 
-        // EDITAR GET
+        // 🔹 EDIT GET
         public IActionResult Edit(int id)
         {
             if (!TieneAcceso(1))
                 return RedirectToAction("Index", "Home");
 
             var role = _context.Roles.Find(id);
+
             if (role == null)
                 return NotFound();
 
             return View(role);
         }
 
-        // EDITAR POST
+        // 🔹 EDIT POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Role role)
@@ -90,16 +92,20 @@ namespace Agro_Mercado.AppMVC.Controllers
                 return View(role);
 
             var roleDb = _context.Roles.Find(id);
+
             if (roleDb == null)
                 return NotFound();
 
+            // 🔥 Actualizamos TODO (Nombre + Descripcion)
             roleDb.Nombre = role.Nombre;
+            roleDb.Descripcion = role.Descripcion;
+
             _context.SaveChanges();
 
             return RedirectToAction("Index");
         }
 
-        // DETALLE
+        // 🔹 DETAILS
         public IActionResult Details(int id)
         {
             if (!TieneAcceso(1))
@@ -115,7 +121,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(role);
         }
 
-        // GET: Role/Delete/5
+        // 🔹 DELETE GET
         public IActionResult Delete(int id)
         {
             if (!TieneAcceso(1))
@@ -131,7 +137,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(role);
         }
 
-        // POST: Role/DeleteConfirmed/5
+        // 🔹 DELETE POST
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
@@ -146,7 +152,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             if (role == null)
                 return NotFound();
 
-            // ⚠ Validación importante
+            // ⚠ Validación
             if (role.Empleados.Any())
             {
                 ModelState.AddModelError("", "No se puede eliminar el rol porque tiene empleados asignados.");
