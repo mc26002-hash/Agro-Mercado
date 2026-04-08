@@ -33,7 +33,9 @@ public class AccountController : Controller
         {
             HttpContext.Session.SetString("Usuario", usuario.Nombre);
 
-            // 🔥 Validar nullable
+
+            HttpContext.Session.SetInt32("EmpleadoId", usuario.Id);
+
             if (usuario.RolId.HasValue)
             {
                 HttpContext.Session.SetInt32("RolId", usuario.RolId.Value);
