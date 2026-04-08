@@ -19,13 +19,13 @@ namespace Agro_Mercado.AppMVC.Controllers
                 return RedirectToAction("Index", "Home");
 
             // 🔹 Evitar null
-            if (productoSearch == null)
-                productoSearch = new Producto();
+            productoSearch ??= new Producto();
 
-            // 🔹 Query base
+            // 🔹 Query base (🔥 AQUÍ ESTÁ LA CLAVE)
             var query = _context.Productos
                 .Include(p => p.Categoria)
                 .Include(p => p.UnidadMedida)
+                .Include(p => p.Presentaciones) // 🔥 NECESARIO
                 .AsQueryable();
 
             // 🔍 FILTRO POR NOMBRE
@@ -51,15 +51,15 @@ namespace Agro_Mercado.AppMVC.Controllers
             var productos = await query.ToListAsync();
 
             // 🔽 Para los selects
-            ViewBag.Categorias = _context.Categorias.ToList();
-            ViewBag.Unidades = _context.UnidadMedida.ToList();
+            ViewBag.Categorias = await _context.Categorias.ToListAsync();
+            ViewBag.Unidades = await _context.UnidadMedida.ToListAsync();
 
-            // 🔥 Para mantener selección en el combo
+            // 🔥 Mantener selección
             ViewBag.TopRegistro = topRegistro;
 
-            // 🔥 ALERTAS (seguro contra null)
+            // 🔥 ALERTAS (sin null porque ya es decimal no nullable)
             var productosBajoStock = await _context.Productos
-                .Where(p => (p.Stock ?? 0) <= (p.StockMinimo ?? 0) && p.Activo == true)
+                .Where(p => p.Stock <= p.StockMinimo && p.Activo == true)
                 .ToListAsync();
 
             ViewBag.ProductosBajoStock = productosBajoStock;
@@ -232,11 +232,11 @@ namespace Agro_Mercado.AppMVC.Controllers
                 return RedirectToAction("Index", "Home");
 
             var productosBajoStock = await _context.Productos
-                .Include(p => p.Categoria)
-                .Include(p => p.UnidadMedida)
-                .Where(p => p.Stock <= p.StockMinimo && p.Activo == true)
-                .OrderBy(p => p.Stock)
-                .ToListAsync();
+    .Include(p => p.Categoria)
+    .Include(p => p.UnidadMedida)
+    .Where(p => p.Stock <= p.StockMinimo && p.Activo == true)
+    .OrderBy(p => p.Stock)
+    .ToListAsync();
 
             return View(productosBajoStock);
         }

@@ -23,6 +23,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             // 🔹 Query base
             var query = _context.MovimientosInventarios
                 .Include(m => m.Producto)
+                .Include(m => m.ProductoPresentacion)
                 .AsQueryable();
 
             // 🔍 FILTRO POR PRODUCTO
@@ -62,6 +63,9 @@ namespace Agro_Mercado.AppMVC.Controllers
                 "Nombre"
             );
 
+            // 🔥 IMPORTANTE
+            ViewBag.Presentaciones = _context.ProductoPresentaciones.ToList();
+
             ViewBag.Motivos = new SelectList(new List<string>
     {
         "Stock inicial"
@@ -75,7 +79,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         // ============================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CrearEntradaInicial(int productoId, int cantidad, string motivo)
+        public IActionResult CrearEntradaInicial(int productoId, int productoPresentacionId, decimal cantidad, string motivo)
         {
             if (cantidad <= 0)
                 ModelState.AddModelError("", "La cantidad debe ser mayor a 0");
@@ -83,6 +87,13 @@ namespace Agro_Mercado.AppMVC.Controllers
             if (string.IsNullOrWhiteSpace(motivo))
                 ModelState.AddModelError("Motivo", "El motivo es obligatorio");
 
+            var producto = _context.Productos.Find(productoId);
+            var presentacion = _context.ProductoPresentaciones.Find(productoPresentacionId);
+
+            if (producto == null || presentacion == null)
+                return NotFound();
+
+            // 🔥 VALIDAR SI YA TIENE STOCK INICIAL
             var existe = _context.MovimientosInventarios
                 .Any(m => m.ProductoId == productoId && m.TipoMovimiento == "Entrada Inicial");
 
@@ -96,20 +107,31 @@ namespace Agro_Mercado.AppMVC.Controllers
                     "Id",
                     "Nombre"
                 );
+
+                ViewBag.Presentaciones = _context.ProductoPresentaciones.ToList();
+
+                ViewBag.Motivos = new SelectList(new List<string>
+        {
+            "Stock inicial"
+        });
+
                 return View();
             }
 
-            var producto = _context.Productos.Find(productoId);
-            if (producto == null) return NotFound();
+            // 🔥 CONVERTIR A UNIDADES BASE
+            decimal unidades = cantidad * presentacion.Equivalencia;
 
-            producto.Stock = cantidad;
+            // 🔥 REEMPLAZAR STOCK (NO SUMA)
+            producto.Stock = unidades;
 
+            // 🔥 REGISTRAR MOVIMIENTO
             var movimiento = new MovimientosInventario
             {
                 ProductoId = productoId,
+                ProductoPresentacionId = productoPresentacionId,
                 TipoMovimiento = "Entrada Inicial",
                 Cantidad = cantidad,
-                Motivo = motivo, // 🔥 IMPORTANTE
+                Motivo = motivo,
                 Fecha = DateTime.Now
             };
 
@@ -130,11 +152,12 @@ namespace Agro_Mercado.AppMVC.Controllers
                 "Nombre"
             );
 
+            ViewBag.Presentaciones = _context.ProductoPresentaciones.ToList();
+
             ViewBag.Motivos = new SelectList(new List<string>
     {
-        "Compra a proveedor",
-    "Ingreso manual",
-    "Ajuste positivo de inventario"
+        "Ingreso manual",
+        "Ajuste positivo de inventario"
     });
 
             return View();
@@ -145,13 +168,19 @@ namespace Agro_Mercado.AppMVC.Controllers
         // ============================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CrearEntrada(int productoId, int cantidad, string motivo)
+        public IActionResult CrearEntrada(int productoId, int productoPresentacionId, decimal cantidad, string motivo)
         {
             if (cantidad <= 0)
                 ModelState.AddModelError("", "Cantidad inválida");
 
             if (string.IsNullOrWhiteSpace(motivo))
                 ModelState.AddModelError("Motivo", "El motivo es obligatorio");
+
+            var producto = _context.Productos.Find(productoId);
+            var presentacion = _context.ProductoPresentaciones.Find(productoPresentacionId);
+
+            if (producto == null || presentacion == null)
+                return NotFound();
 
             if (!ModelState.IsValid)
             {
@@ -160,22 +189,26 @@ namespace Agro_Mercado.AppMVC.Controllers
                     "Id",
                     "Nombre"
                 );
+
+                ViewBag.Presentaciones = _context.ProductoPresentaciones.ToList();
+
                 return View();
             }
 
-            var producto = _context.Productos.Find(productoId);
-            if (producto == null) return NotFound();
+            // 🔥 CONVERTIR A UNIDADES BASE
+            decimal unidades = cantidad * presentacion.Equivalencia;
 
-            // SUMAR STOCK
-            producto.Stock = (producto.Stock ?? 0) + cantidad;
+            // 🔥 SUMAR STOCK
+            producto.Stock += unidades;
 
-            // CREAR MOVIMIENTO
+            // 🔥 REGISTRAR MOVIMIENTO
             var movimiento = new MovimientosInventario
             {
                 ProductoId = productoId,
+                ProductoPresentacionId = productoPresentacionId,
                 TipoMovimiento = "Entrada",
-                Cantidad = cantidad,
-                Motivo = motivo, // 🔥 IMPORTANTE
+                Cantidad = cantidad, // 👈 guardamos lo que el usuario ingresó
+                Motivo = motivo,
                 Fecha = DateTime.Now
             };
 
@@ -196,13 +229,19 @@ namespace Agro_Mercado.AppMVC.Controllers
                 "Nombre"
             );
 
+            ViewBag.Presentaciones = new SelectList(
+                _context.ProductoPresentaciones,
+                "Id",
+                "Nombre"
+            );
+
             ViewBag.Motivos = new SelectList(new List<string>
     {
         "Venta",
-    "Producto dañado",
-    "Producto vencido",
-    "Pérdida o robo",
-    "Ajuste negativo de inventario"
+        "Producto dañado",
+        "Producto vencido",
+        "Pérdida o robo",
+        "Ajuste negativo de inventario"
     });
 
             return View();
@@ -213,7 +252,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         // ============================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CrearSalida(int productoId, int cantidad, string motivo)
+        public IActionResult CrearSalida(int productoId, int productoPresentacionId, decimal cantidad, string motivo)
         {
             if (cantidad <= 0)
                 ModelState.AddModelError("", "Cantidad inválida");
@@ -224,27 +263,52 @@ namespace Agro_Mercado.AppMVC.Controllers
             var producto = _context.Productos.Find(productoId);
             if (producto == null) return NotFound();
 
-            if ((producto.Stock ?? 0) < cantidad)
+            var presentacion = _context.ProductoPresentaciones.Find(productoPresentacionId);
+            if (presentacion == null)
+                ModelState.AddModelError("", "Debe seleccionar una presentación");
+
+            decimal unidades = cantidad * (presentacion?.Equivalencia ?? 1);
+
+            if (producto.Stock < unidades)
                 ModelState.AddModelError("", "No hay suficiente stock");
 
             if (!ModelState.IsValid)
             {
+                // 🔥 IMPORTANTE: RECARGAR TODO
                 ViewBag.Productos = new SelectList(
                     _context.Productos.Where(p => p.Activo == true),
                     "Id",
                     "Nombre"
                 );
+
+                ViewBag.Presentaciones = new SelectList(
+                    _context.ProductoPresentaciones,
+                    "Id",
+                    "Nombre"
+                );
+
+                ViewBag.Motivos = new SelectList(new List<string>
+        {
+            "Venta",
+            "Producto dañado",
+            "Producto vencido",
+            "Pérdida o robo",
+            "Ajuste negativo de inventario"
+        });
+
                 return View();
             }
 
-            producto.Stock -= cantidad;
+            // 🔥 DESCONTAR STOCK EN UNIDADES
+            producto.Stock -= unidades;
 
             var movimiento = new MovimientosInventario
             {
                 ProductoId = productoId,
+                ProductoPresentacionId = productoPresentacionId,
                 TipoMovimiento = "Salida",
-                Cantidad = cantidad,
-                Motivo = motivo, // 🔥 IMPORTANTE
+                Cantidad = cantidad, // 🔥 GUARDAS LO QUE EL USUARIO INGRESA
+                Motivo = motivo,
                 Fecha = DateTime.Now
             };
 

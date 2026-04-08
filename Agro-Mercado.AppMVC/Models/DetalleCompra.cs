@@ -15,6 +15,9 @@ public partial class DetalleCompra
     [Required]
     public int ProductoId { get; set; }
 
+    [Required(ErrorMessage = "Debe seleccionar una presentación")]
+    public int ProductoPresentacionId { get; set; }
+
     [Range(1, int.MaxValue, ErrorMessage = "La cantidad debe ser mayor que 0")]
     public int Cantidad { get; set; }
 
@@ -28,4 +31,6 @@ public partial class DetalleCompra
     public virtual Compra Compra { get; set; } = null!;
 
     public virtual Producto Producto { get; set; } = null!;
+
+    public virtual ProductoPresentacion ProductoPresentacion { get; set; } = null!;
 }

@@ -36,7 +36,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                     b.Property<DateTime?>("Fecha")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())", "DF__AjusteInv__Fecha__73BA3083");
+                        .HasDefaultValueSql("(getdate())", "DF_AjusteInventario_Fecha");
 
                     b.Property<string>("Motivo")
                         .HasMaxLength(200)
@@ -47,7 +47,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id")
-                        .HasName("PK__AjusteIn__3214EC07DA171439");
+                        .HasName("PK__AjusteIn__3214EC07DE678DDF");
 
                     b.HasIndex("ProductoId");
 
@@ -70,7 +70,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                     b.Property<bool>("Estado")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
-                        .HasDefaultValue(true, "DF__Categoria__Estad__74AE54BC");
+                        .HasDefaultValue(true, "DF_Categorias_Estado");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -79,7 +79,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .HasColumnType("varchar(25)");
 
                     b.HasKey("Id")
-                        .HasName("PK__Categori__3214EC0779FC24A7");
+                        .HasName("PK__Categori__3214EC07EB187521");
 
                     b.ToTable("Categorias");
                 });
@@ -132,7 +132,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .HasColumnType("varchar(20)");
 
                     b.HasKey("Id")
-                        .HasName("PK__Clientes__3214EC07F2F6612A");
+                        .HasName("PK__Clientes__3214EC079CFFE7E0");
 
                     b.ToTable("Clientes");
                 });
@@ -148,7 +148,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                     b.Property<int>("EmpleadoId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Fecha")
+                    b.Property<DateTime?>("Fecha")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())", "DF_Compras_Fecha");
@@ -160,7 +160,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .HasColumnType("decimal(10, 2)");
 
                     b.HasKey("Id")
-                        .HasName("PK__Compras__3214EC077BCEEFA7");
+                        .HasName("PK__Compras__3214EC07D61C5802");
 
                     b.HasIndex("EmpleadoId");
 
@@ -202,7 +202,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .HasColumnType("varchar(20)");
 
                     b.HasKey("Id")
-                        .HasName("PK__DatosNeg__3214EC07BC68B38A");
+                        .HasName("PK__DatosNeg__3214EC07C93CABEC");
 
                     b.ToTable("DatosNegocio", (string)null);
                 });
@@ -227,15 +227,20 @@ namespace Agro_Mercado.AppMVC.Migrations
                     b.Property<int>("ProductoId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ProductoPresentacionId")
+                        .HasColumnType("int");
+
                     b.Property<decimal?>("SubTotal")
                         .HasColumnType("decimal(10, 2)");
 
                     b.HasKey("Id")
-                        .HasName("PK__DetalleC__3214EC078E417E5E");
+                        .HasName("PK__DetalleC__3214EC07845542DC");
 
                     b.HasIndex("CompraId");
 
                     b.HasIndex("ProductoId");
+
+                    b.HasIndex("ProductoPresentacionId");
 
                     b.ToTable("DetalleCompra", (string)null);
                 });
@@ -264,7 +269,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id")
-                        .HasName("PK__DetalleV__3214EC07ADC22FB5");
+                        .HasName("PK__DetalleV__3214EC074BD11674");
 
                     b.HasIndex("ProductoId");
 
@@ -308,7 +313,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id")
-                        .HasName("PK__Empleado__3214EC07B645D343");
+                        .HasName("PK__Empleado__3214EC078288C3B4");
 
                     b.HasIndex("RolId");
 
@@ -323,13 +328,13 @@ namespace Agro_Mercado.AppMVC.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Cantidad")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Cantidad")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("Fecha")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())", "DF__Movimient__Fecha__29221CFB");
+                        .HasDefaultValueSql("(getdate())", "DF_MovimientosInventario_Fecha");
 
                     b.Property<string>("Motivo")
                         .IsRequired()
@@ -337,6 +342,9 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("ProductoId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductoPresentacionId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ReferenciaId")
@@ -349,9 +357,11 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .HasColumnType("varchar(20)");
 
                     b.HasKey("Id")
-                        .HasName("PK__Movimien__3214EC0746FF28DF");
+                        .HasName("PK__Movimien__3214EC076DEADF61");
 
                     b.HasIndex("ProductoId");
+
+                    b.HasIndex("ProductoPresentacionId");
 
                     b.ToTable("MovimientosInventario", (string)null);
                 });
@@ -367,7 +377,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                     b.Property<bool?>("Activo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
-                        .HasDefaultValue(true, "DF__Productos__Activ__797309D9");
+                        .HasDefaultValue(true, "DF_Productos_Activo");
 
                     b.Property<int>("CategoriaId")
                         .HasColumnType("int");
@@ -375,7 +385,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                     b.Property<DateTime?>("FechaRegistro")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())", "DF__Productos__Fecha__2BFE89A6");
+                        .HasDefaultValueSql("(getdate())", "DF_Productos_FechaRegistro");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -389,27 +399,61 @@ namespace Agro_Mercado.AppMVC.Migrations
                     b.Property<decimal>("PrecioVenta")
                         .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int?>("Stock")
+                    b.Property<decimal>("Stock")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0, "DF__Productos__Stock__787EE5A0");
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m, "DF_Productos_Stock");
 
                     b.Property<int>("StockMinimo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(0, "DF__Productos__Stock__2B0A656D");
+                        .HasDefaultValue(0, "DF_Productos_StockMinimo");
 
                     b.Property<int>("UnidadMedidaId")
                         .HasColumnType("int");
 
                     b.HasKey("Id")
-                        .HasName("PK__Producto__3214EC07F65436EC");
+                        .HasName("PK__Producto__3214EC0721629926");
 
                     b.HasIndex("CategoriaId");
 
                     b.HasIndex("UnidadMedidaId");
 
                     b.ToTable("Productos");
+                });
+
+            modelBuilder.Entity("Agro_Mercado.AppMVC.Models.ProductoPresentacion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Equivalencia")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("ProductoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductoId");
+
+                    b.ToTable("ProductoPresentaciones");
                 });
 
             modelBuilder.Entity("Agro_Mercado.AppMVC.Models.Proveedore", b =>
@@ -420,12 +464,13 @@ namespace Agro_Mercado.AppMVC.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool?>("Activo")
+                    b.Property<bool>("Activo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true, "DF_Proveedores_Activo");
 
                     b.Property<string>("CorreoElectronico")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)");
@@ -437,6 +482,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.Property<string>("Nit")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)")
@@ -449,18 +495,20 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.Property<string>("Nrc")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)")
                         .HasColumnName("NRC");
 
                     b.Property<string>("Telefono")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)");
 
                     b.HasKey("Id")
-                        .HasName("PK__Proveedo__3214EC07E65ECA02");
+                        .HasName("PK__Proveedo__3214EC071EBDF6A1");
 
                     b.ToTable("Proveedores");
                 });
@@ -473,6 +521,10 @@ namespace Agro_Mercado.AppMVC.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Descripcion")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(25)
@@ -480,7 +532,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .HasColumnType("varchar(25)");
 
                     b.HasKey("Id")
-                        .HasName("PK__Roles__3214EC077F8148AE");
+                        .HasName("PK__Roles__3214EC07E7F7BAA3");
 
                     b.ToTable("Roles");
                 });
@@ -499,7 +551,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
-                        .HasDefaultValue("", "DF__UnidadMed__Abrev__7B5B524B");
+                        .HasDefaultValue("", "DF_UnidadMedida_Abreviatura");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -513,10 +565,10 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)")
-                        .HasDefaultValue("", "DF__UnidadMedi__Tipo__7C4F7684");
+                        .HasDefaultValue("", "DF_UnidadMedida_Tipo");
 
                     b.HasKey("Id")
-                        .HasName("PK__UnidadMe__3214EC07904B150B");
+                        .HasName("PK__UnidadMe__3214EC075DC7E68F");
 
                     b.ToTable("UnidadMedida");
                 });
@@ -543,7 +595,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                     b.Property<DateTime?>("FechaFactura")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
+                        .HasDefaultValueSql("(getdate())", "DF_Ventas_FechaFactura");
 
                     b.Property<decimal?>("Iva")
                         .HasColumnType("decimal(10, 2)")
@@ -566,7 +618,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .HasColumnType("decimal(10, 2)");
 
                     b.HasKey("Id")
-                        .HasName("PK__Ventas__3214EC07831EA5B0");
+                        .HasName("PK__Ventas__3214EC07531B78A7");
 
                     b.HasIndex("ClienteId");
 
@@ -581,7 +633,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .WithMany("AjusteInventarios")
                         .HasForeignKey("ProductoId")
                         .IsRequired()
-                        .HasConstraintName("FK__AjusteInv__Produ__7E37BEF6");
+                        .HasConstraintName("FK__AjusteInv__Produ__73BA3083");
 
                     b.Navigation("Producto");
                 });
@@ -592,13 +644,13 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .WithMany("Compras")
                         .HasForeignKey("EmpleadoId")
                         .IsRequired()
-                        .HasConstraintName("FK__Compras__Emplead__7F2BE32F");
+                        .HasConstraintName("FK__Compras__Emplead__6383C8BA");
 
                     b.HasOne("Agro_Mercado.AppMVC.Models.Proveedore", "Proveedor")
                         .WithMany("Compras")
                         .HasForeignKey("ProveedorId")
                         .IsRequired()
-                        .HasConstraintName("FK__Compras__Proveed__00200768");
+                        .HasConstraintName("FK__Compras__Proveed__628FA481");
 
                     b.Navigation("Empleado");
 
@@ -611,17 +663,25 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .WithMany("DetalleCompras")
                         .HasForeignKey("CompraId")
                         .IsRequired()
-                        .HasConstraintName("FK__DetalleCo__Compr__01142BA1");
+                        .HasConstraintName("FK__DetalleCo__Compr__6B24EA82");
 
                     b.HasOne("Agro_Mercado.AppMVC.Models.Producto", "Producto")
                         .WithMany("DetalleCompras")
                         .HasForeignKey("ProductoId")
                         .IsRequired()
-                        .HasConstraintName("FK__DetalleCo__Produ__02084FDA");
+                        .HasConstraintName("FK__DetalleCo__Produ__6C190EBB");
+
+                    b.HasOne("Agro_Mercado.AppMVC.Models.ProductoPresentacion", "ProductoPresentacion")
+                        .WithMany()
+                        .HasForeignKey("ProductoPresentacionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Compra");
 
                     b.Navigation("Producto");
+
+                    b.Navigation("ProductoPresentacion");
                 });
 
             modelBuilder.Entity("Agro_Mercado.AppMVC.Models.DetalleVentum", b =>
@@ -630,13 +690,13 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .WithMany("DetalleVenta")
                         .HasForeignKey("ProductoId")
                         .IsRequired()
-                        .HasConstraintName("FK__DetalleVe__Produ__02FC7413");
+                        .HasConstraintName("FK__DetalleVe__Produ__6FE99F9F");
 
                     b.HasOne("Agro_Mercado.AppMVC.Models.Venta", "Venta")
                         .WithMany("DetalleVenta")
                         .HasForeignKey("VentaId")
                         .IsRequired()
-                        .HasConstraintName("FK__DetalleVe__Venta__03F0984C");
+                        .HasConstraintName("FK__DetalleVe__Venta__6EF57B66");
 
                     b.Navigation("Producto");
 
@@ -649,7 +709,7 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .WithMany("Empleados")
                         .HasForeignKey("RolId")
                         .IsRequired()
-                        .HasConstraintName("FK__Empleados__RolId__04E4BC85");
+                        .HasConstraintName("FK__Empleados__RolId__59063A47");
 
                     b.Navigation("Rol");
                 });
@@ -662,7 +722,13 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_Movimientos_Productos");
 
+                    b.HasOne("Agro_Mercado.AppMVC.Models.ProductoPresentacion", "ProductoPresentacion")
+                        .WithMany()
+                        .HasForeignKey("ProductoPresentacionId");
+
                     b.Navigation("Producto");
+
+                    b.Navigation("ProductoPresentacion");
                 });
 
             modelBuilder.Entity("Agro_Mercado.AppMVC.Models.Producto", b =>
@@ -671,17 +737,28 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .WithMany("Productos")
                         .HasForeignKey("CategoriaId")
                         .IsRequired()
-                        .HasConstraintName("FK__Productos__Categ__05D8E0BE");
+                        .HasConstraintName("FK__Productos__Categ__5DCAEF64");
 
                     b.HasOne("Agro_Mercado.AppMVC.Models.UnidadMedidum", "UnidadMedida")
                         .WithMany("Productos")
                         .HasForeignKey("UnidadMedidaId")
                         .IsRequired()
-                        .HasConstraintName("FK__Productos__Unida__06CD04F7");
+                        .HasConstraintName("FK__Productos__Unida__5EBF139D");
 
                     b.Navigation("Categoria");
 
                     b.Navigation("UnidadMedida");
+                });
+
+            modelBuilder.Entity("Agro_Mercado.AppMVC.Models.ProductoPresentacion", b =>
+                {
+                    b.HasOne("Agro_Mercado.AppMVC.Models.Producto", "Producto")
+                        .WithMany("Presentaciones")
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Producto");
                 });
 
             modelBuilder.Entity("Agro_Mercado.AppMVC.Models.Venta", b =>
@@ -690,13 +767,13 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .WithMany("Venta")
                         .HasForeignKey("ClienteId")
                         .IsRequired()
-                        .HasConstraintName("FK__Ventas__ClienteI__07C12930");
+                        .HasConstraintName("FK__Ventas__ClienteI__6754599E");
 
                     b.HasOne("Agro_Mercado.AppMVC.Models.Empleado", "Empleado")
                         .WithMany("Venta")
                         .HasForeignKey("EmpleadoId")
                         .IsRequired()
-                        .HasConstraintName("FK__Ventas__Empleado__08B54D69");
+                        .HasConstraintName("FK__Ventas__Empleado__68487DD7");
 
                     b.Navigation("Cliente");
 
@@ -734,6 +811,8 @@ namespace Agro_Mercado.AppMVC.Migrations
                     b.Navigation("DetalleVenta");
 
                     b.Navigation("MovimientosInventarios");
+
+                    b.Navigation("Presentaciones");
                 });
 
             modelBuilder.Entity("Agro_Mercado.AppMVC.Models.Proveedore", b =>

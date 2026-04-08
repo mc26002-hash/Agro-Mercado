@@ -171,7 +171,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            var bajoStock = (item.Stock ?? 0) <= (item.StockMinimo ?? 0);
+            var bajoStock = item.Stock <= item.StockMinimo;
 
             <tr class="@(bajoStock ? "table-danger" : "")">
 
@@ -185,9 +185,48 @@
 
                 <td>$@item.PrecioCompraPromedio?.ToString("0.00")</td>
 
-                <td>@(item.Stock ?? 0)</td>
+                <!-- 🔥 STOCK BONITO -->
+                <td>
+                    @{
+                        decimal restante = item.Stock;
+                        string resultado = "";
 
-                <td>@(item.StockMinimo ?? 0)</td>
+                        var presentaciones = item.Presentaciones?
+                            .OrderByDescending(p => p.Equivalencia)
+                            .ToList();
+
+                        if (presentaciones != null && presentaciones.Any())
+                        {
+                            foreach (var pres in presentaciones)
+                            {
+                                var cantidad = Math.Floor(restante / pres.Equivalencia);
+                                restante = restante % pres.Equivalencia;
+
+                                if (cantidad > 0)
+                                {
+                                    resultado += $"{cantidad} {pres.Nombre} + ";
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(resultado))
+                            {
+                                resultado = resultado.TrimEnd(' ', '+');
+                            }
+                            else
+                            {
+                                resultado = "0";
+                            }
+                        }
+                        else
+                        {
+                            resultado = item.Stock.ToString("0.##");
+                        }
+                    }
+
+                    @resultado
+                </td>
+
+                <td>@item.StockMinimo</td>
 
                 <td>@item.FechaRegistro?.ToString("dd/MM/yyyy")</td>
 
@@ -202,7 +241,7 @@
                     }
                 </td>
 
-                <!-- 🔥 NUEVO: ESTADO DE INVENTARIO -->
+                <!-- 🔥 ESTADO INVENTARIO -->
                 <td>
                     @if (bajoStock)
                     {

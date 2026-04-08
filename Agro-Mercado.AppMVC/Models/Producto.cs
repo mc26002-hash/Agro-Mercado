@@ -24,8 +24,9 @@ public partial class Producto
     [Column(TypeName = "decimal(18,2)")]
     public decimal? PrecioVenta { get; set; }
 
-    [Range(0, int.MaxValue, ErrorMessage = "El stock no puede ser negativo")]
-    public int? Stock { get; set; }
+    [Range(0, 100000000, ErrorMessage = "El stock no puede ser negativo")]
+    [Column(TypeName = "decimal(18,2)")]
+    public decimal Stock { get; set; }
 
     public bool? Activo { get; set; }
 
@@ -53,4 +54,6 @@ public partial class Producto
     public virtual ICollection<MovimientosInventario> MovimientosInventarios { get; set; } = new List<MovimientosInventario>();
 
     public virtual UnidadMedidum UnidadMedida { get; set; } = null!;
+
+    public ICollection<ProductoPresentacion> Presentaciones { get; set; } = new List<ProductoPresentacion>();
 }

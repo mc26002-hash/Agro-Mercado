@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Agro_Mercado.AppMVC.Models;
 
@@ -10,9 +11,13 @@ public partial class MovimientosInventario
 
     public int ProductoId { get; set; }
 
+    // 🔥 NUEVO
+    public int? ProductoPresentacionId { get; set; }
+
     public string TipoMovimiento { get; set; } = null!;
 
-    public int Cantidad { get; set; }
+    [Column(TypeName = "decimal(18,2)")]
+    public decimal Cantidad { get; set; }
 
     public DateTime Fecha { get; set; }
 
@@ -23,4 +28,7 @@ public partial class MovimientosInventario
     public int? ReferenciaId { get; set; }
 
     public virtual Producto Producto { get; set; } = null!;
+
+    // 🔥 NUEVO
+    public virtual ProductoPresentacion? ProductoPresentacion { get; set; }
 }
