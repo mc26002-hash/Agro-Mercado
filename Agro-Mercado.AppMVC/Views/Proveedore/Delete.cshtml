@@ -1,5 +1,60 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model Agro_Mercado.AppMVC.Models.Proveedore
+
+<div class="form-create-container">
+
+    <div class="form-create-card">
+
+        <h4 class="titulo-agro mb-4 text-danger">Eliminar Proveedor</h4>
+
+        <div class="alert alert-danger">
+            ¿Estás seguro que deseas eliminar este Proveedor?
+        </div>
+
+        <form asp-action="DeleteConfirmed" method="post">
+
+            <input type="hidden" asp-for="Id" />
+
+            <div class="row">
+
+                <div class="col-md-12">
+
+                    <div class="card mt-3">
+                        <div class="card-body">
+
+                            <p><strong>Nombre:</strong> @Model.Nombre</p>
+
+                            <p><strong>Teléfono:</strong> @Model.Telefono</p>
+
+                            <p><strong>Dirección:</strong> @Model.Direccion</p>
+
+                            <p><strong>NIT:</strong> @Model.Nit</p>
+
+                            <p><strong>NRC:</strong> @Model.Nrc</p>
+
+                            <p><strong>Correo Electrónico:</strong> @Model.CorreoElectronico</p>
+
+                            <p><strong>Estado:</strong> @(Model.Activo ? "Activo" : "Inactivo")</p>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+
+                <button type="submit" class="btn btn-danger px-4">
+                    Eliminar
+                </button>
+
+                <a asp-action="Index" class="btn btn-secondary px-4">
+                    Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
