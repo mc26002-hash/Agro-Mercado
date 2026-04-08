@@ -80,3 +80,59 @@ body {
         transform: translateY(0);
     }
 }
+
+/* ===== AGRO MERCADO - DETALLE COMPRA (ESTILO AISLADO) ===== */
+
+.agrocmp-container {
+    background-color: #f4f8f4;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.agrocmp-title {
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+.agrocmp-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.agrocmp-label {
+    font-weight: 600;
+    color: #1b5e20;
+}
+
+.agrocmp-table thead {
+    background-color: #2e7d32;
+    color: #fff;
+}
+
+.agrocmp-table tbody tr:hover {
+    background-color: #e8f5e9;
+    transition: 0.3s;
+}
+
+.agrocmp-total {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: right;
+    font-size: 20px;
+    font-weight: bold;
+    color: #1b5e20;
+}
+
+.agrocmp-btn {
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+}
+
+    .agrocmp-btn:hover {
+        background-color: #1b5e20;
+        color: white;
+    }
