@@ -1,5 +1,162 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model Agro_Mercado.AppMVC.Models.Compra
+
+<div class="form-create-container">
+    <div class="">
+
+        <h4 class="titulo-agro mb-4">🛒 Nueva Compra</h4>
+
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <!-- 🔹 PROVEEDOR -->
+            <div class="mb-3">
+                <label class="form-label">Proveedor</label>
+                <select asp-for="ProveedorId" class="form-select input-agro">
+                    <option value="">-- Seleccione --</option>
+                    @foreach (var item in ViewBag.Proveedores)
+                    {
+                        <option value="@item.Id">@item.Nombre</option>
+                    }
+                </select>
+            </div>
+
+            <hr />
+
+            <!-- 🔥 DETALLES DINÁMICOS -->
+            <h5>Productos</h5>
+
+            <div class="row">
+
+                <table class="table" id="tablaDetalles">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Presentación</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>SubTotal</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <button type="button" class="btn btn-primary" onclick="agregarFila()">
+                + Agregar Producto
+            </button>
+
+            <hr />
+
+            <!-- 🔹 TOTAL -->
+            <div class="mb-3">
+                <label>Total</label>
+                <input asp-for="Total" class="form-control input-agro" readonly />
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <button type="submit" class="btn btn-success px-4">Guardar</button>
+                <a asp-action="Index" class="btn btn-secondary px-4">Cancelar</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let index = 0;
+
+                function agregarFila() {
+            let fila = `
+            <tr>
+                <td>
+                    <select name="detalles[${index}].ProductoId" class="form-select">
+                        <option value="">Producto</option>
+                        ${generarProductos()}
+                    </select>
+                </td>
+
+                <td>
+                    <select name="detalles[${index}].ProductoPresentacionId" class="form-select">
+                        <option value="">Presentación</option>
+                        ${generarPresentaciones()}
+                    </select>
+                </td>
+
+                <td>
+                    <input type="number" name="detalles[${index}].Cantidad"
+                           class="form-control" onchange="calcular(this)" />
+                </td>
+
+                <td>
+                    <input type="number" step="0.01" name="detalles[${index}].Precio"
+                           class="form-control" onchange="calcular(this)" />
+                </td>
+
+                <td>
+                    <input type="text" class="form-control subtotal" readonly />
+                </td>
+
+                <td>
+                    <button type="button" class="btn btn-danger" onclick="eliminarFila(this)">
+                        X
+                    </button>
+                </td>
+            </tr>
+            `;
+
+            document.querySelector("#tablaDetalles tbody").insertAdjacentHTML("beforeend", fila);
+            index++;
+        }
+
+        function eliminarFila(btn) {
+            btn.closest("tr").remove();
+            calcularTotal();
+        }
+
+        function calcular(input) {
+            let fila = input.closest("tr");
+            let cantidad = fila.querySelector("input[name*='Cantidad']").value || 0;
+            let precio = fila.querySelector("input[name*='Precio']").value || 0;
+
+            let subtotal = cantidad * precio;
+
+            fila.querySelector(".subtotal").value = subtotal.toFixed(2);
+
+            calcularTotal();
+        }
+
+        function calcularTotal() {
+            let total = 0;
+
+            document.querySelectorAll(".subtotal").forEach(s => {
+                total += parseFloat(s.value) || 0;
+            });
+
+            document.querySelector("input[name='Total']").value = total.toFixed(2);
+        }
+
+                function generarProductos() {
+            let html = "";
+            @foreach (var p in ViewBag.Productos)
+            {
+                        <text>
+                                    html += `<option value="@p.Id">@p.Nombre</option>`;
+                        </text>
+            }
+            return html;
+        }
+
+        function generarPresentaciones() {
+            let html = "";
+            @foreach (var p in ViewBag.Presentaciones)
+            {
+                        <text>
+                                    html += `<option value="@p.Id">@p.Nombre</option>`;
+                        </text>
+            }
+            return html;
+        }
+    </script>
 }
