@@ -1,5 +1,92 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model Agro_Mercado.AppMVC.Models.Compra
+
+<div class="agrocmp-container">
+
+    <h2 class="agrocmp-title text-center mb-4">🌿 Detalle de Compra</h2>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="agrocmp-card">
+                <p><span class="agrocmp-label">Proveedor:</span> @Model.Proveedor?.Nombre</p>
+                <p><span class="agrocmp-label">Empleado:</span> @Model.Empleado?.Nombre</p>
+                <p>
+                    <span class="agrocmp-label">Fecha:</span>
+                    @(Model.Fecha.HasValue
+                        ? Model.Fecha.Value.ToString("dd/MM/yyyy HH:mm")
+                        : "")
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <h4 class="agrocmp-title mb-3">🛒 Productos comprados</h4>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="agrocmp-card">
+                <table class="table table-bordered agrocmp-table text-center align-middle">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>SubTotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.DetalleCompras)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@item.Producto?.Nombre</td>
+
+                                <td>
+                                    @if (item.ProductoPresentacion != null)
+                                    {
+                                        var unidades = item.Cantidad * item.ProductoPresentacion.Equivalencia;
+
+                                        @($"{item.Cantidad.ToString("0.##")} {item.ProductoPresentacion.Nombre} ({unidades.ToString("0.##")} unidades)")
+                                    }
+                                    else
+                                    {
+                                        @($"{item.Cantidad.ToString("0.##")} unidades")
+                                    }
+                                </td>
+
+                                <td>
+                                    $@item.Precio.ToString("0.00")
+                                </td>
+
+                                <td class="fw-bold text-success">
+                                    $@(item.SubTotal.HasValue
+                                                                                                                ? item.SubTotal.Value.ToString("0.00")
+                                                                                                        : "0.00")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-6 offset-md-6">
+            <div class="agrocmp-total">
+                Total: $@(Model.Total.HasValue
+                                                    ? Model.Total.Value.ToString("0.00")
+                                            : "0.00")
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 text-end">
+        <a asp-action="Index" class="btn agrocmp-btn px-4">⬅ Volver</a>
+    </div>
+
+</div>
