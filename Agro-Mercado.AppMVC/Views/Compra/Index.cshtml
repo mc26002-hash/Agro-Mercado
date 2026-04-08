@@ -1,5 +1,135 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model IEnumerable<Agro_Mercado.AppMVC.Models.Compra>
+
+<h2>Compras</h2>
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Buscar Compras</h5>
+
+            <form asp-controller="Compra" asp-action="Index" method="get">
+                <div class="row g-3 align-items-end">
+
+                    <!-- 🔽 Proveedor -->
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold text-muted small">Proveedor</label>
+                        <div class="input-group shadow-sm">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-truck text-primary"></i>
+                            </span>
+                            <select name="ProveedorId" class="form-select">
+                                <option value="0">Todos</option>
+                                @foreach (var proveedor in ViewBag.Proveedores)
+                                {
+                                    <option value="@proveedor.Id">
+                                        @proveedor.Nombre
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 🔽 Empleado -->
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold text-muted small">Empleado</label>
+                        <div class="input-group shadow-sm">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-person text-primary"></i>
+                            </span>
+                            <select name="EmpleadoId" class="form-select">
+                                <option value="0">Todos</option>
+                                @foreach (var emp in ViewBag.Empleados)
+                                {
+                                    <option value="@emp.Id">
+                                        @emp.Nombre
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 🔢 Cantidad -->
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold text-muted small">Cantidad</label>
+                        <div class="input-group shadow-sm">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-list-ol text-primary"></i>
+                            </span>
+
+                            <select name="topRegistro" class="form-select">
+
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="0">Todos</option>
+
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 🔘 Botones -->
+                <div class="row mt-4">
+                    <div class="col-12 d-flex gap-2">
+
+                        <button type="submit" class="btn btn-primary px-4 shadow-sm fw-bold">
+                            <i class="bi bi-search me-2"></i>Buscar
+                        </button>
+
+                        <a asp-action="Index" class="btn btn-secondary px-4 shadow-sm">
+                            <i class="bi bi-eraser me-2"></i>Limpiar
+                        </a>
+
+                        <a asp-action="Create" class="btn btn-success px-4 shadow-sm">
+                            <i class="bi bi-plus-lg me-2"></i>Nueva Compra
+                        </a>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- 🧾 TABLA -->
+<table class="table table-bordered mt-4">
+    <thead>
+        <tr>
+            <th>Proveedor</th>
+            <th>Empleado</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th style="width: 260px;">Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Proveedor?.Nombre</td>
+                <td>@item.Empleado?.Nombre</td>
+                <td>@item.Fecha?.ToString("dd/MM/yyyy")</td>
+                <td>$@item.Total</td>
+
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
+                        Ver
+                    </a>
+
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                        Editar
+                    </a>
+
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                        Eliminar
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
