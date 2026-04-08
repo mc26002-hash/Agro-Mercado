@@ -1,5 +1,100 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model Agro_Mercado.AppMVC.Models.ProductoPresentacion
+
+<div class="form-create-container">
+
+    <div class="form-create-card">
+
+        <h4 class="titulo-agro mb-4">✏️ Editar Presentación</h4>
+
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" asp-for="Id" />
+
+            <div class="row">
+
+                <!-- 🔹 Producto -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Producto</label>
+
+                    <select asp-for="ProductoId" class="form-select input-agro">
+                        <option value="">-- Seleccione un producto --</option>
+
+                        @foreach (var item in ViewBag.Productos)
+                        {
+                            <option value="@item.Id">@item.Nombre</option>
+                        }
+                    </select>
+
+                    <span asp-validation-for="ProductoId" class="text-danger"></span>
+                </div>
+
+                <!-- 🔹 Nombre Presentación -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Nombre</label>
+
+                    <input asp-for="Nombre" class="form-control input-agro"
+                           placeholder="Ej: Caja, Saco, Libra, Unidad" />
+
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+
+
+                <!-- 🔹 Tipo -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Tipo</label>
+
+                    <select asp-for="Tipo" class="form-select input-agro">
+                        <option value="">-- Seleccione tipo --</option>
+                        <option value="Compra">Compra</option>
+                        <option value="Venta">Venta</option>
+                    </select>
+
+                    <span asp-validation-for="Tipo" class="text-danger"></span>
+                </div>
+
+                
+                <!-- 🔹 Equivalencia -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Equivalencia</label>
+
+                    <input asp-for="Equivalencia" class="form-control input-agro"
+                           placeholder="Ej: 100 (si es caja de 100 unidades)" />
+
+                    <span asp-validation-for="Equivalencia" class="text-danger"></span>
+                </div>
+
+                <!-- 🔹 Activo -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Activo</label>
+
+                    <select asp-for="Activo" class="form-select input-agro">
+                        <option value="true">Activo</option>
+                        <option value="false">Inactivo</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+
+                <button type="submit" class="btn btn-warning px-4">
+                    Guardar Cambios
+                </button>
+
+                <a asp-action="Index" class="btn btn-secondary px-4">
+                    Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
