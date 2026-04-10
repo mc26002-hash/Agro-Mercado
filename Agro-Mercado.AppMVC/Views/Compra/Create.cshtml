@@ -1,105 +1,129 @@
 ﻿@model Agro_Mercado.AppMVC.Models.Compra
 
-<div class="form-create-container">
-    <div class="">
+<div class="agrocmp-container">
 
-        <h4 class="titulo-agro mb-4">🛒 Nueva Compra</h4>
+    <h2 class="agrocmp-title text-center mb-4">🛒 Nueva Compra</h2>
 
-        <form asp-action="Create" method="post">
-            @Html.AntiForgeryToken()
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
 
-            <!-- 🔹 PROVEEDOR -->
-            <div class="mb-3">
-                <label class="form-label">Proveedor</label>
-                <select asp-for="ProveedorId" class="form-select input-agro">
-                    <option value="">-- Seleccione --</option>
-                    @foreach (var item in ViewBag.Proveedores)
-                    {
-                        <option value="@item.Id">@item.Nombre</option>
-                    }
-                </select>
+        <!-- 🔹 PROVEEDOR -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="agrocmp-card mb-3">
+                    <label class="form-label agrocmp-label">Proveedor</label>
+                    <select asp-for="ProveedorId" class="form-select">
+                        <option value="">-- Seleccione --</option>
+                        @foreach (var item in ViewBag.Proveedores)
+                        {
+                            <option value="@item.Id">@item.Nombre</option>
+                        }
+                    </select>
+                </div>
             </div>
+        </div>
 
-            <hr />
+        <hr />
 
-            <!-- 🔥 DETALLES DINÁMICOS -->
-            <h5>Productos</h5>
+        <!-- 🔥 DETALLES -->
+        <h5 class="agrocmp-title mb-3">🛒 Productos</h5>
 
-            <div class="row">
+        <div class="row">
+            <div class="col-12">
+                <div class="agrocmp-card">
 
-                <table class="table" id="tablaDetalles">
-                    <thead>
-                        <tr>
-                            <th>Producto</th>
-                            <th>Presentación</th>
-                            <th>Cantidad</th>
-                            <th>Precio</th>
-                            <th>SubTotal</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                    <div class="table-responsive">
+                        <table class="table table-bordered agrocmp-table align-middle text-center" id="tablaDetalles">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Presentación</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>SubTotal</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                </div>
             </div>
+        </div>
 
-            <button type="button" class="btn btn-primary" onclick="agregarFila()">
-                + Agregar Producto
+        <button type="button" class="btn btn-primary mt-3" onclick="agregarFila()">
+            + Agregar Producto
+        </button>
+
+        <hr />
+
+        <!-- 🔹 TOTAL -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="agrocmp-card">
+                    <label class="agrocmp-label">Total</label>
+                    <input asp-for="Total" class="form-control text-end fw-bold" readonly />
+                </div>
+            </div>
+        </div>
+
+        <!-- 🔘 BOTONES -->
+        <div class="mt-4 text-end">
+            <button type="submit" class="btn btn-success me-2">
+                Guardar
             </button>
 
-            <hr />
+            <a asp-action="Index" class="btn btn-secondary">
+                Cancelar
+            </a>
+        </div>
 
-            <!-- 🔹 TOTAL -->
-            <div class="mb-3">
-                <label>Total</label>
-                <input asp-for="Total" class="form-control input-agro" readonly />
-            </div>
+    </form>
 
-            <div class="d-flex justify-content-end gap-2 mt-4">
-                <button type="submit" class="btn btn-success px-4">Guardar</button>
-                <a asp-action="Index" class="btn btn-secondary px-4">Cancelar</a>
-            </div>
-
-        </form>
-    </div>
 </div>
 
 @section Scripts {
     <script>
         let index = 0;
 
-                function agregarFila() {
+        function agregarFila() {
             let fila = `
             <tr>
                 <td>
                     <select name="detalles[${index}].ProductoId" class="form-select">
-                        <option value="">Producto</option>
                         ${generarProductos()}
                     </select>
                 </td>
 
                 <td>
                     <select name="detalles[${index}].ProductoPresentacionId" class="form-select">
-                        <option value="">Presentación</option>
+                        <option value="">--</option>
                         ${generarPresentaciones()}
                     </select>
                 </td>
 
                 <td>
                     <input type="number" name="detalles[${index}].Cantidad"
-                           class="form-control" onchange="calcular(this)" />
+                           class="form-control text-center"
+                           onchange="calcular(this)" />
                 </td>
 
                 <td>
-                    <input type="number" step="0.01" name="detalles[${index}].Precio"
-                           class="form-control" onchange="calcular(this)" />
+                    <input type="number" step="0.01"
+                           name="detalles[${index}].Precio"
+                           class="form-control text-center"
+                           onchange="calcular(this)" />
                 </td>
 
                 <td>
-                    <input type="text" class="form-control subtotal" readonly />
+                    <input type="text"
+                           class="form-control subtotal text-center fw-bold"
+                           readonly />
                 </td>
 
                 <td>
-                    <button type="button" class="btn btn-danger" onclick="eliminarFila(this)">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">
                         X
                     </button>
                 </td>
@@ -117,8 +141,9 @@
 
         function calcular(input) {
             let fila = input.closest("tr");
-            let cantidad = fila.querySelector("input[name*='Cantidad']").value || 0;
-            let precio = fila.querySelector("input[name*='Precio']").value || 0;
+
+            let cantidad = parseFloat(fila.querySelector("input[name*='Cantidad']").value) || 0;
+            let precio = parseFloat(fila.querySelector("input[name*='Precio']").value) || 0;
 
             let subtotal = cantidad * precio;
 
@@ -137,7 +162,7 @@
             document.querySelector("input[name='Total']").value = total.toFixed(2);
         }
 
-                function generarProductos() {
+        function generarProductos() {
             let html = "";
             @foreach (var p in ViewBag.Productos)
             {
