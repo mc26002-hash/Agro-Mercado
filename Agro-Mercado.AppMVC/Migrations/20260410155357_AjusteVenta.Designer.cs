@@ -4,6 +4,7 @@ using Agro_Mercado.AppMVC.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Agro_Mercado.AppMVC.Migrations
 {
     [DbContext(typeof(AgroMercadoSprintContext))]
-    partial class AgroMercadoSprintContextModelSnapshot : ModelSnapshot
+    [Migration("20260410155357_AjusteVenta")]
+    partial class AjusteVenta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,7 +95,7 @@ namespace Agro_Mercado.AppMVC.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Activo")
+                    b.Property<bool?>("Activo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true, "DF_Clientes_Activo");
@@ -108,11 +111,23 @@ namespace Agro_Mercado.AppMVC.Migrations
                         .HasColumnType("varchar(10)")
                         .HasColumnName("DUI");
 
+                    b.Property<string>("Nit")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("NIT");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(60)
                         .IsUnicode(false)
                         .HasColumnType("varchar(60)");
+
+                    b.Property<string>("Nrc")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("NRC");
 
                     b.Property<string>("Telefono")
                         .HasMaxLength(20)
