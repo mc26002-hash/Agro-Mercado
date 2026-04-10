@@ -1,5 +1,76 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model Agro_Mercado.AppMVC.Models.Cliente
+
+<div class="form-create-container">
+    <div class="form-create-card">
+
+        <h4 class="titulo-agro mb-4">👤 Editar Cliente</h4>
+
+        <form asp-action="Edit" method="post">
+
+            <input type="hidden" asp-for="Id" />
+
+            
+
+            <div class="row">
+
+                <!-- 🔹 Nombre -->
+                <div class="col-md-12 mb-3">
+                    <label>Nombre</label>
+                    <input asp-for="Nombre" class="form-control input-agro" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+
+                <!-- 🔹 DUI -->
+                <div class="col-md-6 mb-3">
+                    <label>DUI</label>
+                    <input asp-for="Dui" class="form-control input-agro" />
+                    <span asp-validation-for="Dui" class="text-danger"></span>
+                </div>
+
+                <!-- 🔹 Teléfono -->
+                <div class="col-md-6 mb-3">
+                    <label>Teléfono</label>
+                    <input asp-for="Telefono" class="form-control input-agro" />
+                    <span asp-validation-for="Telefono" class="text-danger"></span>
+                </div>
+
+                <!-- 🔹 Dirección -->
+                <div class="col-md-12 mb-3">
+                    <label>Dirección</label>
+                    <input asp-for="Direccion" class="form-control input-agro" />
+                    <span asp-validation-for="Direccion" class="text-danger"></span>
+                </div>
+
+                <!-- 🔹 Estado -->
+                <div class="col-md-6 mb-3">
+                    <label>Activo</label>
+                    <select asp-for="Activo" class="form-control input-agro">
+                        <option value="true">Activo</option>
+                        <option value="false">Inactivo</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+
+                <button type="submit" class="btn btn-warning px-4">
+                    <i class="bi bi-pencil-square me-2"></i>Guardar
+                </button>
+
+                <a asp-action="Index" class="btn btn-secondary px-4">
+                    <i class="bi bi-x-circle me-2"></i>Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
