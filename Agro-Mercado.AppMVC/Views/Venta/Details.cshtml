@@ -1,0 +1,88 @@
+﻿@model Agro_Mercado.AppMVC.Models.Venta
+
+<div class="agrocmp-container">
+
+    <h2 class="agrocmp-title text-center mb-4">🧾 Detalle de Venta</h2>
+
+    <!-- 🔹 DATOS GENERALES -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="agrocmp-card mb-3">
+                <p><strong>Cliente:</strong> @Model.Cliente?.Nombre</p>
+                <p><strong>Empleado:</strong> @Model.Empleado?.Nombre</p>
+                <p><strong>Método de Pago:</strong> @Model.MetodoPago</p>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="agrocmp-card mb-3 text-end">
+                <p><strong>Factura:</strong> @Model.NumeroFactura</p>
+                <p><strong>Fecha:</strong> @Model.Fecha.ToString("dd/MM/yyyy")</p>
+                <p><strong>Fecha Factura:</strong> @Model.FechaFactura?.ToString("dd/MM/yyyy")</p>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <!-- 🔥 DETALLE PRODUCTOS -->
+    <h5 class="agrocmp-title mb-3">🛒 Productos</h5>
+
+    <div class="agrocmp-card">
+        <div class="table-responsive">
+            <table class="table table-bordered agrocmp-table text-center align-middle">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Presentación</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>SubTotal</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model.DetalleVenta)
+                    {
+                        <tr>
+                            <td>@item.Producto?.Nombre</td>
+                            <td>@item.ProductoPresentacion?.Nombre</td>
+                            <td>@item.Cantidad</td>
+                            <td>$@item.Precio.ToString("0.00")</td>
+                            <td>$@item.SubTotal.ToString("0.00")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <hr />
+
+    <!-- 🔹 TOTALES -->
+    <div class="row justify-content-end">
+
+        <div class="col-md-4">
+            <div class="agrocmp-card text-end">
+                <p><strong>SubTotal:</strong> $@Model.SubTotal.ToString("0.00")</p>
+                <p><strong>IVA (13%):</strong> $@Model.Iva.ToString("0.00")</p>
+                <h5><strong>Total:</strong> $@Model.Total.ToString("0.00")</h5>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 🔘 BOTONES -->
+    <div class="mt-4 text-end">
+
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
+            <i class="bi bi-pencil-square me-1"></i>Editar
+        </a>
+
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left me-1"></i>Volver
+        </a>
+
+    </div>
+
+</div>

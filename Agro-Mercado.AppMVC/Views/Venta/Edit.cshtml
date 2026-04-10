@@ -1,0 +1,281 @@
+﻿@model Agro_Mercado.AppMVC.Models.Venta
+
+<div class="agrocmp-container">
+
+    <h2 class="agrocmp-title text-center mb-4">✏️ Editar Venta</h2>
+
+    <form asp-action="Edit" method="post">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="Id" />
+
+        <!-- 🔥 ERRORES -->
+        <div asp-validation-summary="All" class="alert alert-danger"></div>
+
+        <!-- 🔹 CLIENTE + MÉTODO -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="agrocmp-card mb-3">
+                    <label class="form-label agrocmp-label">Cliente</label>
+                    <select asp-for="ClienteId" class="form-select">
+                        <option value="">-- Seleccione --</option>
+                        @foreach (var item in ViewBag.Clientes)
+                        {
+                            <option value="@item.Id" selected="@(item.Id == Model.ClienteId)">
+                                @item.Nombre
+                            </option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="agrocmp-card mb-3">
+                    <label class="agrocmp-label">Método de Pago</label>
+                    <select asp-for="MetodoPago" class="form-select">
+                        <option value="">-- Seleccione --</option>
+                        <option value="Efectivo" selected="@(Model.MetodoPago == "Efectivo")">Efectivo</option>
+                        <option value="Tarjeta" selected="@(Model.MetodoPago == "Tarjeta")">Tarjeta</option>
+                        <option value="Transferencia" selected="@(Model.MetodoPago == "Transferencia")">Transferencia</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <!-- 🔥 DETALLES -->
+        <h5 class="agrocmp-title mb-3">🛒 Productos</h5>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="agrocmp-card">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered agrocmp-table align-middle text-center" id="tablaDetalles">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Presentación</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>SubTotal</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @if (Model.DetalleVenta != null)
+                                {
+                                    int i = 0;
+                                    foreach (var d in Model.DetalleVenta)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <select name="detalles[@i].ProductoId" class="form-select">
+                                                    @foreach (var p in ViewBag.Productos)
+                                                    {
+                                                        <option value="@p.Id" selected="@(p.Id == d.ProductoId)">
+                                                            @p.Nombre
+                                                        </option>
+                                                    }
+                                                </select>
+                                            </td>
+
+                                            <td>
+                                                <select name="detalles[@i].ProductoPresentacionId" class="form-select">
+                                                    @foreach (var pr in ViewBag.Presentaciones)
+                                                    {
+                                                        <option value="@pr.Id" selected="@(pr.Id == d.ProductoPresentacionId)">
+                                                            @pr.Nombre
+                                                        </option>
+                                                    }
+                                                </select>
+                                            </td>
+
+                                            <td>
+                                                <input type="number"
+                                                       name="detalles[@i].Cantidad"
+                                                       value="@d.Cantidad"
+                                                       class="form-control text-center"
+                                                       onchange="calcular(this)" />
+                                            </td>
+
+                                            <td>
+                                                <input type="number" step="0.01"
+                                                       name="detalles[@i].Precio"
+                                                       value="@d.Precio"
+                                                       class="form-control text-center"
+                                                       onchange="calcular(this)" />
+                                            </td>
+
+                                            <td>
+                                                <input type="text"
+                                                       value="@d.SubTotal"
+                                                       class="form-control subtotal text-center fw-bold"
+                                                       readonly />
+                                            </td>
+
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">
+                                                    X
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        i++;
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-primary mt-3" onclick="agregarFila()">
+            + Agregar Producto
+        </button>
+
+        <hr />
+
+        <!-- 🔹 TOTALES -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="agrocmp-card">
+                    <label class="agrocmp-label">SubTotal</label>
+                    <input asp-for="SubTotal" class="form-control text-end fw-bold" readonly />
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="agrocmp-card">
+                    <label class="agrocmp-label">IVA (13%)</label>
+                    <input asp-for="Iva" class="form-control text-end fw-bold" readonly />
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="agrocmp-card">
+                    <label class="agrocmp-label">Total</label>
+                    <input asp-for="Total" class="form-control text-end fw-bold" readonly />
+                </div>
+            </div>
+        </div>
+
+        <!-- 🔘 BOTONES -->
+        <div class="mt-4 text-end">
+            <button type="submit" class="btn btn-success me-2">
+                Guardar Cambios
+            </button>
+
+            <a asp-action="Index" class="btn btn-secondary">
+                Cancelar
+            </a>
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    <script>
+        let index = @Model.DetalleVenta.Count;
+
+        function agregarFila() {
+            let fila = `
+            <tr>
+                <td>
+                    <select name="detalles[${index}].ProductoId" class="form-select">
+                        ${generarProductos()}
+                    </select>
+                </td>
+
+                <td>
+                    <select name="detalles[${index}].ProductoPresentacionId" class="form-select">
+                        ${generarPresentaciones()}
+                    </select>
+                </td>
+
+                <td>
+                    <input type="number" name="detalles[${index}].Cantidad"
+                           class="form-control text-center"
+                           onchange="calcular(this)" />
+                </td>
+
+                <td>
+                    <input type="number" step="0.01"
+                           name="detalles[${index}].Precio"
+                           class="form-control text-center"
+                           onchange="calcular(this)" />
+                </td>
+
+                <td>
+                    <input type="text"
+                           class="form-control subtotal text-center fw-bold"
+                           readonly />
+                </td>
+
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">
+                        X
+                    </button>
+                </td>
+            </tr>
+            `;
+
+            document.querySelector("#tablaDetalles tbody").insertAdjacentHTML("beforeend", fila);
+            index++;
+        }
+
+        function eliminarFila(btn) {
+            btn.closest("tr").remove();
+            calcularTotal();
+        }
+
+        function calcular(input) {
+            let fila = input.closest("tr");
+            let cantidad = fila.querySelector("input[name*='Cantidad']").value || 0;
+            let precio = fila.querySelector("input[name*='Precio']").value || 0;
+
+            let subtotal = cantidad * precio;
+            fila.querySelector(".subtotal").value = subtotal.toFixed(2);
+
+            calcularTotal();
+        }
+
+        function calcularTotal() {
+            let subtotal = 0;
+
+            document.querySelectorAll(".subtotal").forEach(s => {
+                subtotal += parseFloat(s.value) || 0;
+            });
+
+            let iva = subtotal * 0.13;
+            let total = subtotal + iva;
+
+            document.querySelector("input[name='SubTotal']").value = subtotal.toFixed(2);
+            document.querySelector("input[name='Iva']").value = iva.toFixed(2);
+            document.querySelector("input[name='Total']").value = total.toFixed(2);
+        }
+
+        function generarProductos() {
+            let html = "";
+            @foreach (var p in ViewBag.Productos)
+            {
+                        <text>html += `<option value="@p.Id">@p.Nombre</option>`;</text>
+            }
+            return html;
+        }
+
+        function generarPresentaciones() {
+            let html = "";
+            @foreach (var p in ViewBag.Presentaciones)
+            {
+                        <text>html += `<option value="@p.Id">@p.Nombre</option>`;</text>
+            }
+            return html;
+        }
+    </script>
+}
