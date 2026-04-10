@@ -19,15 +19,10 @@ public partial class Cliente
     [StringLength(100, ErrorMessage = "La dirección es demasiado larga")]
     public string? Direccion { get; set; }
 
-    public bool? Activo { get; set; }
+    public bool Activo { get; set; } = true; // 🔥 mejor así
 
-    [StringLength(20, ErrorMessage = "El NIT no puede superar los 17 caracteres")]
-    public string? Nit { get; set; }
-
-    [StringLength(20)]
-    public string? Nrc { get; set; }
-
-    [StringLength(10, ErrorMessage = "El DUI debe tener un formato válido")]
+    // 🔥 SOLO DUI (EL SALVADOR)
+    [StringLength(10, ErrorMessage = "El DUI no puede superar los 10 caracteres")]
     public string? Dui { get; set; }
 
     public virtual ICollection<Venta> Venta { get; set; } = new List<Venta>();

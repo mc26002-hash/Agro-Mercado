@@ -78,17 +78,9 @@ public partial class AgroMercadoSprintContext : DbContext
                 .HasMaxLength(10)
                 .IsUnicode(false)
                 .HasColumnName("DUI");
-            entity.Property(e => e.Nit)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasColumnName("NIT");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(60)
                 .IsUnicode(false);
-            entity.Property(e => e.Nrc)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasColumnName("NRC");
             entity.Property(e => e.Telefono)
                 .HasMaxLength(20)
                 .IsUnicode(false);
