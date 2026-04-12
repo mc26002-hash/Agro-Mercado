@@ -25,18 +25,18 @@ namespace Agro_Mercado.AppMVC.Controllers
                 .Include(e => e.Rol)
                 .AsQueryable();
 
-            // 🔍 Nombre
+            
             if (!string.IsNullOrWhiteSpace(empleadoSearch.Nombre))
                 query = query.Where(e => e.Nombre.Contains(empleadoSearch.Nombre));
 
-            // 🔍 Rol
+            
             if (empleadoSearch.RolId > 0)
                 query = query.Where(e => e.RolId == empleadoSearch.RolId);
 
-            // 🔢 Orden
+            
             query = query.OrderByDescending(e => e.Id);
 
-            // 🔥 NUEVO: manejar "Todos"
+            
             if (topRegistro > 0)
                 query = query.Take(topRegistro);
 
@@ -47,7 +47,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(empleados);
         }
 
-        // CREAR GET
+        
         public IActionResult Create()
         {
             if (!TieneAcceso(1))
@@ -58,7 +58,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View();
         }
 
-        // CREAR POST
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Empleado empleado)
@@ -85,11 +85,11 @@ namespace Agro_Mercado.AppMVC.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Roles = _context.Roles.ToList(); // 👈 agregar esto
+            ViewBag.Roles = _context.Roles.ToList();
             return View(empleado);
         }
 
-        // EDITAR GET
+        
         public IActionResult Edit(int id)
         {
             if (!TieneAcceso(1))
@@ -101,12 +101,12 @@ namespace Agro_Mercado.AppMVC.Controllers
                 return NotFound();
             }
 
-            ViewBag.Roles = _context.Roles.ToList(); // 👈 agregar esto
+            ViewBag.Roles = _context.Roles.ToList(); 
 
             return View(empleado);
         }
 
-        // EDITAR POST
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Empleado empleado)
@@ -118,7 +118,7 @@ namespace Agro_Mercado.AppMVC.Controllers
 
             if (!ModelState.IsValid)
             {
-                ViewBag.Roles = _context.Roles.ToList(); // 👈 importante
+                ViewBag.Roles = _context.Roles.ToList(); 
                 return View(empleado);
             }
 
@@ -138,7 +138,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Empleado/Delete/5
+        
         public IActionResult Delete(int id)
         {
             if (!TieneAcceso(1))
@@ -154,7 +154,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(empleado);
         }
 
-        // POST: Empleados/DeleteConfirmed/5
+        
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
@@ -173,7 +173,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // DETALLE
+        
         public IActionResult Details(int id)
         {
             if (!TieneAcceso(1))

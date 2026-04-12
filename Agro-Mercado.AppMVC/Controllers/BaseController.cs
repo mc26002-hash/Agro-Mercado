@@ -21,7 +21,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         protected bool EsAdmin()
         {
             var rol = HttpContext.Session.GetInt32("RolId");
-            return rol == 1; // 1 = Administrador
+            return rol == 1; 
         }
 
     }

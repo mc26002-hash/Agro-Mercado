@@ -13,9 +13,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             _context = context;
         }
 
-        // ===========================
-        // 🔥 MÉTODO PARA FORMATEAR STOCK
-        // ===========================
+        
         private string FormatearStock(decimal stock)
         {
             int cajas = (int)(stock / 100);
@@ -30,9 +28,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return $"{unidades} unidades";
         }
 
-        // ===========================
-        // 🔹 INDEX
-        // ===========================
+        
         public async Task<IActionResult> Index(Venta? ventaSearch, int topRegistro = 5)
         {
             if (!TieneAcceso(1))
@@ -65,9 +61,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(ventas);
         }
 
-        // ===========================
-        // 🔹 CREATE GET
-        // ===========================
+        
         public IActionResult Create()
         {
             if (!TieneAcceso(1))
@@ -77,7 +71,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             ViewBag.Productos = _context.Productos.ToList();
             ViewBag.Presentaciones = _context.ProductoPresentaciones.ToList();
 
-            // 🔥 STOCK FORMATEADO
+            
             ViewBag.StockFormateado = _context.Productos
                 .ToDictionary(
                     p => p.Id,
@@ -87,9 +81,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View();
         }
 
-        // ===========================
-        // 🔹 CREATE POST
-        // ===========================
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Venta venta, List<DetalleVentum> detalles)
@@ -158,9 +150,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return RedirectToAction("Index");
         }
 
-        // ===========================
-        // 🔹 EDIT GET
-        // ===========================
+        
         public IActionResult Edit(int id)
         {
             if (!TieneAcceso(1))
@@ -180,7 +170,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             ViewBag.Productos = _context.Productos.ToList();
             ViewBag.Presentaciones = _context.ProductoPresentaciones.ToList();
 
-            // 🔥 STOCK FORMATEADO
+            
             ViewBag.StockFormateado = _context.Productos
                 .ToDictionary(
                     p => p.Id,
@@ -190,9 +180,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(venta);
         }
 
-        // ===========================
-        // 🔹 EDIT POST (TU LÓGICA IGUAL)
-        // ===========================
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Venta venta, List<DetalleVentum>? detalles)

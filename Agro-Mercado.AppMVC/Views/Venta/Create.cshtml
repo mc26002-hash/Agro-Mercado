@@ -7,7 +7,7 @@
     <form asp-action="Create" method="post">
         @Html.AntiForgeryToken()
 
-        <!-- 🔹 CLIENTE + MÉTODO -->
+        
         <div class="row">
             <div class="col-md-6">
                 <div class="agrocmp-card mb-3">
@@ -38,7 +38,7 @@
 
         <hr />
 
-        <!-- 🔥 DETALLES -->
+        
         <h5 class="agrocmp-title mb-3">🛒 Productos</h5>
 
         <div class="table-responsive">
@@ -63,7 +63,7 @@
 
         <hr />
 
-        <!-- 🔹 TOTALES -->
+        
         <div class="row">
             <div class="col-md-4">
                 <input asp-for="SubTotal" class="form-control" readonly />
@@ -88,7 +88,7 @@
     <script>
         let index = 0;
 
-        // 🔥 PRODUCTOS CON STOCK FORMATEADO (CAJAS + UNIDADES)
+        
         const productos = [
             @foreach (var p in ViewBag.Productos)
             {
@@ -201,7 +201,7 @@
             document.querySelector("[name='Total']").value = total.toFixed(2);
         }
 
-        // 🔥 VALIDAR STOCK
+        
         function validarStock(input) {
             let fila = input.closest("tr");
             let select = fila.querySelector("select[name*='ProductoId']");

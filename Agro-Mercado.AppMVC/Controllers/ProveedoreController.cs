@@ -13,9 +13,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             _context = context;
         }
 
-        // ===========================
-        // 🔹 INDEX (FILTRO + TABLA)
-        // ===========================
+        
         public async Task<IActionResult> Index(Proveedore? proveedorSearch, int topRegistro = 5)
         {
             if (!TieneAcceso(1))
@@ -27,18 +25,18 @@ namespace Agro_Mercado.AppMVC.Controllers
             var query = _context.Proveedores
                 .AsQueryable();
 
-            // 🔍 Nombre
+            
             if (!string.IsNullOrWhiteSpace(proveedorSearch.Nombre))
                 query = query.Where(p => p.Nombre.Contains(proveedorSearch.Nombre));
 
-            // 🔍 Activo
+            
             if (proveedorSearch.Activo)
                 query = query.Where(p => p.Activo == proveedorSearch.Activo);
 
-            // 🔢 Orden
+            
             query = query.OrderByDescending(p => p.Id);
 
-            // 🔥 Top registros
+            
             if (topRegistro > 0)
                 query = query.Take(topRegistro);
 
@@ -47,9 +45,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(proveedores);
         }
 
-        // ===========================
-        // 🔹 CREATE GET
-        // ===========================
+        
         public IActionResult Create()
         {
             if (!TieneAcceso(1))
@@ -58,9 +54,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View();
         }
 
-        // ===========================
-        // 🔹 CREATE POST
-        // ===========================
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Proveedore proveedor)
@@ -79,9 +73,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(proveedor);
         }
 
-        // ===========================
-        // 🔹 EDIT GET
-        // ===========================
+        
         public IActionResult Edit(int id)
         {
             if (!TieneAcceso(1))
@@ -95,9 +87,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(proveedor);
         }
 
-        // ===========================
-        // 🔹 EDIT POST
-        // ===========================
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Proveedore proveedor)
@@ -126,9 +116,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return RedirectToAction("Index");
         }
 
-        // ===========================
-        // 🔹 DELETE GET
-        // ===========================
+        
         public IActionResult Delete(int id)
         {
             if (!TieneAcceso(1))
@@ -142,9 +130,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(proveedor);
         }
 
-        // ===========================
-        // 🔹 DELETE POST
-        // ===========================
+        
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
@@ -163,9 +149,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ===========================
-        // 🔹 DETAILS
-        // ===========================
+        
         public IActionResult Details(int id)
         {
             if (!TieneAcceso(1))

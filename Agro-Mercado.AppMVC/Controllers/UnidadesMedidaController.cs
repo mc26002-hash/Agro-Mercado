@@ -23,28 +23,28 @@ namespace Agro_Mercado.AppMVC.Controllers
 
             var query = _context.UnidadMedida.AsQueryable();
 
-            // 🔍 Nombre
+            
             if (!string.IsNullOrWhiteSpace(unidadSearch.Nombre))
                 query = query.Where(u => u.Nombre.Contains(unidadSearch.Nombre));
 
-            // 🔍 Abreviatura
+            
             if (!string.IsNullOrWhiteSpace(unidadSearch.Abreviatura))
                 query = query.Where(u => u.Abreviatura.Contains(unidadSearch.Abreviatura));
 
-            // 🔍 Tipo
+            
             if (!string.IsNullOrWhiteSpace(unidadSearch.Tipo))
                 query = query.Where(u => u.Tipo == unidadSearch.Tipo);
 
-            // 🔢 ORDEN
+            
             query = query.OrderByDescending(u => u.Id);
 
-            // 🔥 CANTIDAD (0 = TODOS)
+            
             if (topRegistro > 0)
                 query = query.Take(topRegistro);
 
             var lista = query.ToList();
 
-            // 🔥 IMPORTANTE (esto faltaba)
+            
             ViewBag.Tipos = _context.UnidadMedida
                 .Select(u => u.Tipo)
                 .Distinct()
@@ -53,7 +53,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(lista);
         }
 
-        // DETALLES
+        
         public IActionResult Details(int id)
         {
             if (!TieneAcceso(1, 6, 8))
@@ -66,7 +66,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(unidad);
         }
 
-        // CREAR GET
+        
         public IActionResult Create()
         {
             if (!TieneAcceso(1, 6, 8))
@@ -75,7 +75,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View();
         }
 
-        // CREAR POST
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(UnidadMedidum unidad)
@@ -92,7 +92,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // EDITAR GET
+        
         public IActionResult Edit(int id)
         {
             if (!TieneAcceso(1, 6, 8))
@@ -105,7 +105,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(unidad);
         }
 
-        // EDITAR POST
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, UnidadMedidum unidad)
@@ -129,7 +129,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ELIMINAR GET
+        
         public IActionResult Delete(int id)
         {
             if (!TieneAcceso(1, 6, 8))
@@ -142,7 +142,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(unidad);
         }
 
-        // ELIMINAR POST
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)

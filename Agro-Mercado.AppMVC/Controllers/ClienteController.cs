@@ -13,9 +13,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             _context = context;
         }
 
-        // ===========================
-        // 🔹 INDEX (FILTRO)
-        // ===========================
+        
         public async Task<IActionResult> Index(Cliente clienteSearch, int topRegistro = 10)
         {
             if (!TieneAcceso(1))
@@ -26,7 +24,7 @@ namespace Agro_Mercado.AppMVC.Controllers
 
             var query = _context.Clientes.AsQueryable();
 
-            // 🔍 FILTROS
+            
             if (!string.IsNullOrWhiteSpace(clienteSearch.Nombre))
                 query = query.Where(c => c.Nombre.Contains(clienteSearch.Nombre));
 
@@ -46,9 +44,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(clientes);
         }
 
-        // ===========================
-        // 🔹 CREATE GET
-        // ===========================
+        
         public IActionResult Create()
         {
             if (!TieneAcceso(1))
@@ -57,9 +53,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View();
         }
 
-        // ===========================
-        // 🔹 CREATE POST
-        // ===========================
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Cliente cliente)
@@ -84,9 +78,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ===========================
-        // 🔹 EDIT GET
-        // ===========================
+        
         public async Task<IActionResult> Edit(int id)
         {
             if (!TieneAcceso(1))
@@ -100,9 +92,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(cliente);
         }
 
-        // ===========================
-        // 🔹 EDIT POST
-        // ===========================
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Cliente cliente)
@@ -145,9 +135,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ===========================
-        // 🔹 DELETE GET
-        // ===========================
+        
         public async Task<IActionResult> Delete(int id)
         {
             if (!TieneAcceso(1))
@@ -162,9 +150,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(cliente);
         }
 
-        // ===========================
-        // 🔹 DELETE POST
-        // ===========================
+        
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -190,9 +176,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ===========================
-        // 🔹 DETAILS
-        // ===========================
+        
         public async Task<IActionResult> Details(int id)
         {
             if (!TieneAcceso(1))

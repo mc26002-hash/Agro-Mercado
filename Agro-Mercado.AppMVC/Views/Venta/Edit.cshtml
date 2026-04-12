@@ -11,7 +11,7 @@
 
         <div asp-validation-summary="All" class="alert alert-danger"></div>
 
-        <!-- 🔹 CLIENTE + MÉTODO -->
+        
         <div class="row">
             <div class="col-md-6">
                 <label>Cliente</label>
@@ -39,7 +39,7 @@
 
         <hr />
 
-        <!-- 🔥 DETALLES -->
+        
         <h5>🛒 Productos</h5>
 
         <table class="table table-bordered text-center" id="tablaDetalles">
@@ -123,7 +123,7 @@
 
         <hr />
 
-        <!-- 🔹 TOTALES -->
+        
         <div class="row">
             <div class="col-md-4">
                 <input asp-for="SubTotal" class="form-control" readonly />
@@ -148,10 +148,10 @@
     <script>
         let index = @Model.DetalleVenta.Count;
 
-        // 🔥 STOCK FORMATEADO
+        
         const stockFormateado = @Html.Raw(Json.Serialize(ViewBag.StockFormateado));
 
-        // 🔥 PRODUCTOS
+        
         const productos = [
             @foreach (var p in ViewBag.Productos)
             {
@@ -159,7 +159,7 @@
             }
         ];
 
-        // 🔥 PRESENTACIONES
+        
         const presentaciones = [
             @foreach (var p in ViewBag.Presentaciones)
             {

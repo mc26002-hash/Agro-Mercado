@@ -12,7 +12,7 @@ namespace Agro_Mercado.AppMVC.Models
         [StringLength(20, ErrorMessage = "El nombre no puede superar los 20 caracteres")]
         public string Nombre { get; set; } = string.Empty;
 
-        // 🔹 NUEVO: Descripción informativa del rol
+        
         [StringLength(200, ErrorMessage = "La descripción no puede superar los 200 caracteres")]
         public string? Descripcion { get; set; }
 

@@ -13,7 +13,7 @@ public partial class DetalleVentum
     [Required]
     public int ProductoId { get; set; }
 
-    // 🔥 NUEVO (CLAVE)
+  
     [Required(ErrorMessage = "Debe seleccionar una presentación")]
     public int ProductoPresentacionId { get; set; }
 
@@ -30,6 +30,6 @@ public partial class DetalleVentum
     public virtual Producto Producto { get; set; } = null!;
     public virtual Venta Venta { get; set; } = null!;
 
-    // 🔥 NUEVA RELACIÓN
+    
     public virtual ProductoPresentacion ProductoPresentacion { get; set; } = null!;
 }

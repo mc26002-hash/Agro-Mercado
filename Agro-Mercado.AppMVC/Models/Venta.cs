@@ -40,6 +40,6 @@ public partial class Venta
     public virtual Cliente Cliente { get; set; } = null!;
     public virtual Empleado Empleado { get; set; } = null!;
 
-    // 🔥 RELACIÓN CLAVE
+   
     public virtual ICollection<DetalleVentum> DetalleVenta { get; set; } = new List<DetalleVentum>();
 }

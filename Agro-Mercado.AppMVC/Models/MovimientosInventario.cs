@@ -11,7 +11,7 @@ public partial class MovimientosInventario
 
     public int ProductoId { get; set; }
 
-    // 🔥 NUEVO
+    
     public int? ProductoPresentacionId { get; set; }
 
     public string TipoMovimiento { get; set; } = null!;
@@ -29,6 +29,6 @@ public partial class MovimientosInventario
 
     public virtual Producto Producto { get; set; } = null!;
 
-    // 🔥 NUEVO
+    
     public virtual ProductoPresentacion? ProductoPresentacion { get; set; }
 }

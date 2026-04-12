@@ -16,45 +16,43 @@ namespace Agro_Mercado.AppMVC.Controllers
 
         public IActionResult Index(MovimientosInventario? movimientoSearch, int topRegistro = 5)
         {
-            // 🔹 Evitar null
+            
             if (movimientoSearch == null)
                 movimientoSearch = new MovimientosInventario();
 
-            // 🔹 Query base
+            
             var query = _context.MovimientosInventarios
                 .Include(m => m.Producto)
                 .Include(m => m.ProductoPresentacion)
                 .AsQueryable();
 
-            // 🔍 FILTRO POR PRODUCTO
+            
             if (movimientoSearch.ProductoId > 0)
                 query = query.Where(m => m.ProductoId == movimientoSearch.ProductoId);
 
-            // 🔍 FILTRO POR TIPO DE MOVIMIENTO
+            
             if (!string.IsNullOrWhiteSpace(movimientoSearch.TipoMovimiento))
                 query = query.Where(m => m.TipoMovimiento.Contains(movimientoSearch.TipoMovimiento));
 
-            // 🔢 ORDENAR
+            
             query = query.OrderByDescending(m => m.Fecha);
 
-            // 🔥 CANTIDAD (0 = TODOS)
+            
             if (topRegistro > 0)
                 query = query.Take(topRegistro);
 
             var movimientos = query.ToList();
 
-            // 🔽 Para el select
+            
             ViewBag.Productos = _context.Productos.ToList();
 
-            // 🔥 Para mantener selección del combo
+            
             ViewBag.TopRegistro = topRegistro;
 
             return View(movimientos);
         }
 
-        // ============================
-        // FORMULARIO ENTRADA INICIAL
-        // ============================
+        
         public IActionResult CrearEntradaInicial()
         {
             ViewBag.Productos = new SelectList(
@@ -63,7 +61,7 @@ namespace Agro_Mercado.AppMVC.Controllers
                 "Nombre"
             );
 
-            // 🔥 IMPORTANTE
+            
             ViewBag.Presentaciones = _context.ProductoPresentaciones.ToList();
 
             ViewBag.Motivos = new SelectList(new List<string>
@@ -74,9 +72,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View();
         }
 
-        // ============================
-        // GUARDAR ENTRADA INICIAL
-        // ============================
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CrearEntradaInicial(int productoId, int productoPresentacionId, decimal cantidad, string motivo)
@@ -93,7 +89,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             if (producto == null || presentacion == null)
                 return NotFound();
 
-            // 🔥 VALIDAR SI YA TIENE STOCK INICIAL
+            
             var existe = _context.MovimientosInventarios
                 .Any(m => m.ProductoId == productoId && m.TipoMovimiento == "Entrada Inicial");
 
@@ -118,13 +114,13 @@ namespace Agro_Mercado.AppMVC.Controllers
                 return View();
             }
 
-            // 🔥 CONVERTIR A UNIDADES BASE
+            
             decimal unidades = cantidad * presentacion.Equivalencia;
 
-            // 🔥 REEMPLAZAR STOCK (NO SUMA)
+            
             producto.Stock = unidades;
 
-            // 🔥 REGISTRAR MOVIMIENTO
+            
             var movimiento = new MovimientosInventario
             {
                 ProductoId = productoId,
@@ -141,9 +137,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ============================
-        // FORMULARIO ENTRADA NORMAL
-        // ============================
+        
         public IActionResult CrearEntrada()
         {
             ViewBag.Productos = new SelectList(
@@ -163,9 +157,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View();
         }
 
-        // ============================
-        // GUARDAR ENTRADA NORMAL
-        // ============================
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CrearEntrada(int productoId, int productoPresentacionId, decimal cantidad, string motivo)
@@ -195,19 +187,19 @@ namespace Agro_Mercado.AppMVC.Controllers
                 return View();
             }
 
-            // 🔥 CONVERTIR A UNIDADES BASE
+            
             decimal unidades = cantidad * presentacion.Equivalencia;
 
-            // 🔥 SUMAR STOCK
+            
             producto.Stock += unidades;
 
-            // 🔥 REGISTRAR MOVIMIENTO
+            
             var movimiento = new MovimientosInventario
             {
                 ProductoId = productoId,
                 ProductoPresentacionId = productoPresentacionId,
                 TipoMovimiento = "Entrada",
-                Cantidad = cantidad, // 👈 guardamos lo que el usuario ingresó
+                Cantidad = cantidad, 
                 Motivo = motivo,
                 Fecha = DateTime.Now
             };
@@ -218,9 +210,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ============================
-        // FORMULARIO SALIDA
-        // ============================
+        
         public IActionResult CrearSalida()
         {
             ViewBag.Productos = new SelectList(
@@ -247,9 +237,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View();
         }
 
-        // ============================
-        // GUARDAR SALIDA
-        // ============================
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CrearSalida(int productoId, int productoPresentacionId, decimal cantidad, string motivo)
@@ -274,7 +262,7 @@ namespace Agro_Mercado.AppMVC.Controllers
 
             if (!ModelState.IsValid)
             {
-                // 🔥 IMPORTANTE: RECARGAR TODO
+                
                 ViewBag.Productos = new SelectList(
                     _context.Productos.Where(p => p.Activo == true),
                     "Id",
@@ -299,7 +287,7 @@ namespace Agro_Mercado.AppMVC.Controllers
                 return View();
             }
 
-            // 🔥 DESCONTAR STOCK EN UNIDADES
+            
             producto.Stock -= unidades;
 
             var movimiento = new MovimientosInventario
@@ -307,7 +295,7 @@ namespace Agro_Mercado.AppMVC.Controllers
                 ProductoId = productoId,
                 ProductoPresentacionId = productoPresentacionId,
                 TipoMovimiento = "Salida",
-                Cantidad = cantidad, // 🔥 GUARDAS LO QUE EL USUARIO INGRESA
+                Cantidad = cantidad, 
                 Motivo = motivo,
                 Fecha = DateTime.Now
             };
@@ -318,9 +306,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ============================
-        // DETALLE
-        // ============================
+        
         public IActionResult Details(int id)
         {
             var movimiento = _context.MovimientosInventarios
@@ -332,9 +318,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(movimiento);
         }
 
-        // ============================
-        // CONFIRMAR ELIMINAR
-        // ============================
+        
         public IActionResult Delete(int id)
         {
             var movimiento = _context.MovimientosInventarios
@@ -346,9 +330,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(movimiento);
         }
 
-        // ============================
-        // ELIMINAR
-        // ============================
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
@@ -359,7 +341,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             {
                 var producto = _context.Productos.Find(movimiento.ProductoId);
 
-                // 🔥 Revertir stock según tipo
+                
                 if (producto != null)
                 {
                     if (movimiento.TipoMovimiento == "Entrada" || movimiento.TipoMovimiento == "Entrada Inicial")

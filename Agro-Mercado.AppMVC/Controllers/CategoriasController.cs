@@ -38,7 +38,7 @@ namespace Agro_Mercado.AppMVC.Controllers
 
             query = query.OrderByDescending(c => c.Id);
 
-            // 🔥 CANTIDAD (0 = TODOS)
+            
             if (topRegistro > 0)
                 query = query.Take(topRegistro);
 
@@ -47,7 +47,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(lista);
         }
 
-        // DETALLE
+        
         public async Task<IActionResult> Details(int id)
         {
             if (!TieneAcceso(1, 6, 8))
@@ -62,7 +62,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(categoria);
         }
 
-        // CREAR GET
+        
         public IActionResult Create()
         {
             if (!TieneAcceso(1, 6, 8))
@@ -71,7 +71,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View();
         }
 
-        // CREAR POST
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Categoria categoria)
@@ -90,7 +90,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // EDITAR GET
+        
         public async Task<IActionResult> Edit(int id)
         {
             if (!TieneAcceso(1, 6, 8))
@@ -104,7 +104,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(categoria);
         }
 
-        // EDITAR POST
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Categoria categoria)
@@ -136,7 +136,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // DELETE GET
+        
         public async Task<IActionResult> Delete(int id)
         {
             if (!TieneAcceso(1, 6, 8))
@@ -151,7 +151,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(categoria);
         }
 
-        // DELETE POST
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -166,7 +166,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             if (categoria == null)
                 return NotFound();
 
-            // Validar si tiene productos
+            
             if (categoria.Productos.Any())
             {
                 TempData["Error"] = "No se puede eliminar porque tiene productos asociados.";

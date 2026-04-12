@@ -14,7 +14,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             _context = context;
         }
 
-        // INDEX - Mostrar información
+        
         public IActionResult Index()
         {
             if (!TieneAcceso(1))
@@ -32,7 +32,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(datos);
         }
 
-        // GET Edit
+        
         public IActionResult Edit(int id)
         {
             if (!TieneAcceso(1))
@@ -45,7 +45,7 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(datos);
         }
 
-        // POST Edit
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, DatosNegocio datos)
