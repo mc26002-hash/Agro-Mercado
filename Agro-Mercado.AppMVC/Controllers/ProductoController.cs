@@ -15,10 +15,10 @@ namespace Agro_Mercado.AppMVC.Controllers
 
         public async Task<IActionResult> Index(Producto? productoSearch, int topRegistro = 5)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
-            
+
             productoSearch ??= new Producto();
 
             
@@ -70,7 +70,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult Create()
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             ViewBag.Categorias = _context.Categorias.ToList();
@@ -83,7 +83,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Producto producto)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             ModelState.Remove("Categoria");
@@ -114,7 +114,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public async Task<IActionResult> Edit(int id)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             var producto = await _context.Productos.FindAsync(id);
@@ -133,7 +133,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Producto producto)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             if (id != producto.Id)
@@ -174,7 +174,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public async Task<IActionResult> Details(int id)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             var producto = await _context.Productos
@@ -191,7 +191,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public async Task<IActionResult> Delete(int? id)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             var producto = await _context.Productos
@@ -210,7 +210,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             var producto = await _context.Productos.FindAsync(id);
@@ -226,7 +226,7 @@ namespace Agro_Mercado.AppMVC.Controllers
 
         public async Task<IActionResult> Alertas()
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             var productosBajoStock = await _context.Productos

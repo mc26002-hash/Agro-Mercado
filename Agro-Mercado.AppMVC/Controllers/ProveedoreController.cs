@@ -16,7 +16,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public async Task<IActionResult> Index(Proveedore? proveedorSearch, int topRegistro = 5)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6))
                 return RedirectToAction("Index", "Home");
 
             if (proveedorSearch == null)
@@ -48,7 +48,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult Create()
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6))
                 return RedirectToAction("Index", "Home");
 
             return View();
@@ -59,7 +59,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Proveedore proveedor)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6))
                 return RedirectToAction("Index", "Home");
 
             if (ModelState.IsValid)
@@ -76,7 +76,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult Edit(int id)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6))
                 return RedirectToAction("Index", "Home");
 
             var proveedor = _context.Proveedores.Find(id);
@@ -92,7 +92,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Proveedore proveedor)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6))
                 return RedirectToAction("Index", "Home");
 
             if (!ModelState.IsValid)
@@ -119,7 +119,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult Delete(int id)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6))
                 return RedirectToAction("Index", "Home");
 
             var proveedor = _context.Proveedores.Find(id);
@@ -135,7 +135,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6))
                 return RedirectToAction("Index", "Home");
 
             var proveedor = _context.Proveedores.Find(id);
@@ -152,7 +152,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult Details(int id)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6))
                 return RedirectToAction("Index", "Home");
 
             var proveedor = _context.Proveedores

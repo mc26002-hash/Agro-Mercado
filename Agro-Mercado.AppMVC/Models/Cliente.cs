@@ -12,6 +12,7 @@ public partial class Cliente
     [StringLength(60, ErrorMessage = "El nombre no puede superar los 60 caracteres")]
     public string Nombre { get; set; } = null!;
 
+    [Required(ErrorMessage = "El numero de telefono es obligatorio")]
     [Phone(ErrorMessage = "El número de teléfono no es válido")]
     [StringLength(20)]
     public string? Telefono { get; set; }
@@ -19,9 +20,10 @@ public partial class Cliente
     [StringLength(100, ErrorMessage = "La dirección es demasiado larga")]
     public string? Direccion { get; set; }
 
-    public bool Activo { get; set; } = true; 
+    public bool Activo { get; set; } = true; // 🔥 mejor así
 
-    
+    // 🔥 SOLO DUI (EL SALVADOR)
+    [Required(ErrorMessage = "El DUI es obligatorio")]
     [StringLength(10, ErrorMessage = "El DUI no puede superar los 10 caracteres")]
     public string? Dui { get; set; }
 

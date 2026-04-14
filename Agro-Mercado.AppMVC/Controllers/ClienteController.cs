@@ -13,10 +13,12 @@ namespace Agro_Mercado.AppMVC.Controllers
             _context = context;
         }
 
-        
+        // ===========================
+        // 🔹 INDEX (FILTRO)
+        // ===========================
         public async Task<IActionResult> Index(Cliente clienteSearch, int topRegistro = 10)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 8))
                 return RedirectToAction("Index", "Home");
 
             if (clienteSearch == null)
@@ -24,7 +26,7 @@ namespace Agro_Mercado.AppMVC.Controllers
 
             var query = _context.Clientes.AsQueryable();
 
-            
+            // 🔍 FILTROS
             if (!string.IsNullOrWhiteSpace(clienteSearch.Nombre))
                 query = query.Where(c => c.Nombre.Contains(clienteSearch.Nombre));
 
@@ -44,29 +46,33 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(clientes);
         }
 
-        
+        // ===========================
+        // 🔹 CREATE GET
+        // ===========================
         public IActionResult Create()
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 8))
                 return RedirectToAction("Index", "Home");
 
             return View();
         }
 
-        
+        // ===========================
+        // 🔹 CREATE POST
+        // ===========================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Cliente cliente)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 8))
                 return RedirectToAction("Index", "Home");
+
+            // 🔥 IMPORTANTE: quitar navegación que rompe validación
+            ModelState.Remove("Venta");
 
             if (!ModelState.IsValid)
             {
-                var errores = ModelState.Values
-                    .SelectMany(v => v.Errors)
-                    .Select(e => e.ErrorMessage);
-
+                // 🔥 REGRESA A LA MISMA VISTA (NO CONTENT)
                 return View(cliente);
             }
 
@@ -78,10 +84,12 @@ namespace Agro_Mercado.AppMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        
+        // ===========================
+        // 🔹 EDIT GET
+        // ===========================
         public async Task<IActionResult> Edit(int id)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 8))
                 return RedirectToAction("Index", "Home");
 
             var cliente = await _context.Clientes.FindAsync(id);
@@ -92,24 +100,26 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(cliente);
         }
 
-        
+        // ===========================
+        // 🔹 EDIT POST
+        // ===========================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Cliente cliente)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 8))
                 return RedirectToAction("Index", "Home");
 
             if (id != cliente.Id)
                 return NotFound();
 
+            // 🔥 IMPORTANTE
+            ModelState.Remove("Venta");
+
             if (!ModelState.IsValid)
             {
-                var errores = ModelState.Values
-                    .SelectMany(v => v.Errors)
-                    .Select(e => e.ErrorMessage);
-
-                return Content("ERRORES: " + string.Join(" | ", errores));
+                // 🔥 MOSTRAR ERRORES EN LA VISTA
+                return View(cliente);
             }
 
             try
@@ -126,19 +136,23 @@ namespace Agro_Mercado.AppMVC.Controllers
                 clienteDb.Activo = cliente.Activo;
 
                 await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                return Content("ERROR: " + ex.Message);
+                // 🔥 ERROR EN LA MISMA VISTA
+                ModelState.AddModelError("", "Error: " + ex.Message);
+                return View(cliente);
             }
-
-            return RedirectToAction(nameof(Index));
         }
 
-        
+        // ===========================
+        // 🔹 DELETE GET
+        // ===========================
         public async Task<IActionResult> Delete(int id)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 8))
                 return RedirectToAction("Index", "Home");
 
             var cliente = await _context.Clientes
@@ -150,12 +164,14 @@ namespace Agro_Mercado.AppMVC.Controllers
             return View(cliente);
         }
 
-        
+        // ===========================
+        // 🔹 DELETE POST
+        // ===========================
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 8))
                 return RedirectToAction("Index", "Home");
 
             var cliente = await _context.Clientes.FindAsync(id);
@@ -176,10 +192,12 @@ namespace Agro_Mercado.AppMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        
+        // ===========================
+        // 🔹 DETAILS
+        // ===========================
         public async Task<IActionResult> Details(int id)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 8))
                 return RedirectToAction("Index", "Home");
 
             var cliente = await _context.Clientes

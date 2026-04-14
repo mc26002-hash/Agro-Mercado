@@ -16,7 +16,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public async Task<IActionResult> Index(ProductoPresentacion? search, int topRegistro = 10)
         {
-            if (!TieneAcceso(1))
+            if(!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             if (search == null)
@@ -55,7 +55,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult Create()
         {
-            if (!TieneAcceso(1))
+            if(!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             ViewBag.Productos = _context.Productos.ToList();
@@ -68,7 +68,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(ProductoPresentacion model)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             ModelState.Remove("Producto");
@@ -88,7 +88,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult Edit(int id)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             var data = _context.ProductoPresentaciones.Find(id);
@@ -106,7 +106,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, ProductoPresentacion model)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             ModelState.Remove("Producto");
@@ -136,7 +136,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult Delete(int id)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             var data = _context.ProductoPresentaciones
@@ -154,7 +154,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             var data = _context.ProductoPresentaciones.Find(id);
@@ -171,7 +171,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult Details(int id)
         {
-            if (!TieneAcceso(1))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             var data = _context.ProductoPresentaciones

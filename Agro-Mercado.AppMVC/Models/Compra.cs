@@ -12,7 +12,7 @@ public partial class Compra
     public DateTime? Fecha { get; set; }
 
     [Required(ErrorMessage = "Debe seleccionar un proveedor")]
-    public int ProveedorId { get; set; }
+    public int? ProveedorId { get; set; }
 
     public int EmpleadoId { get; set; }
 

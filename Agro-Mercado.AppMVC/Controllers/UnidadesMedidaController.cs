@@ -15,7 +15,7 @@ namespace Agro_Mercado.AppMVC.Controllers
 
         public IActionResult Index(UnidadMedidum? unidadSearch, int topRegistro = 5)
         {
-            if (!TieneAcceso(1, 6, 8))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             if (unidadSearch == null)
@@ -56,7 +56,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult Details(int id)
         {
-            if (!TieneAcceso(1, 6, 8))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             var unidad = _context.UnidadMedida.Find(id);
@@ -69,7 +69,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult Create()
         {
-            if (!TieneAcceso(1, 6, 8))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             return View();
@@ -80,7 +80,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(UnidadMedidum unidad)
         {
-            if (!TieneAcceso(1, 6, 8))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             if (!ModelState.IsValid)
@@ -95,7 +95,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult Edit(int id)
         {
-            if (!TieneAcceso(1, 6, 8))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             var unidad = _context.UnidadMedida.Find(id);
@@ -110,7 +110,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, UnidadMedidum unidad)
         {
-            if (!TieneAcceso(1, 6, 8))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             if (!ModelState.IsValid)
@@ -132,7 +132,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult Delete(int id)
         {
-            if (!TieneAcceso(1, 6, 8))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             var unidad = _context.UnidadMedida.Find(id);
@@ -147,7 +147,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            if (!TieneAcceso(1, 6, 8))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             var unidad = _context.UnidadMedida.Find(id);

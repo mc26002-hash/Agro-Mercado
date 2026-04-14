@@ -15,7 +15,7 @@ namespace Agro_Mercado.AppMVC.Controllers
 
         public async Task<IActionResult> Index(Categoria? categoriaSearch, int topRegistro = 5)
         {
-            if (!TieneAcceso(1, 6, 8))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             if (categoriaSearch == null)
@@ -50,7 +50,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public async Task<IActionResult> Details(int id)
         {
-            if (!TieneAcceso(1, 6, 8))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             var categoria = await _context.Categorias
@@ -65,7 +65,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult Create()
         {
-            if (!TieneAcceso(1, 6, 8))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             return View();
@@ -76,7 +76,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Categoria categoria)
         {
-            if (!TieneAcceso(1, 6, 8))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             if (!ModelState.IsValid)
@@ -93,7 +93,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public async Task<IActionResult> Edit(int id)
         {
-            if (!TieneAcceso(1, 6, 8))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             var categoria = await _context.Categorias.FindAsync(id);
@@ -109,7 +109,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Categoria categoria)
         {
-            if (!TieneAcceso(1, 6, 8))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             if (id != categoria.Id)
@@ -139,7 +139,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public async Task<IActionResult> Delete(int id)
         {
-            if (!TieneAcceso(1, 6, 8))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             var categoria = await _context.Categorias
@@ -156,7 +156,7 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (!TieneAcceso(1, 6, 8))
+            if (!TieneAcceso(1, 6, 10))
                 return RedirectToAction("Index", "Home");
 
             var categoria = await _context.Categorias

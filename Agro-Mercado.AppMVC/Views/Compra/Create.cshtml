@@ -1,23 +1,35 @@
-﻿@model Agro_Mercado.AppMVC.Models.Compra
+﻿@model Agro_Mercado.AppMVC.Models.Venta
 
 <div class="agrocmp-container">
 
-    <h2 class="agrocmp-title text-center mb-4">🛒 Nueva Compra</h2>
+    <h2 class="agrocmp-title text-center mb-4">💰 Nueva Venta</h2>
 
     <form asp-action="Create" method="post">
         @Html.AntiForgeryToken()
 
-        
         <div class="row">
             <div class="col-md-6">
                 <div class="agrocmp-card mb-3">
-                    <label class="form-label agrocmp-label">Proveedor</label>
-                    <select asp-for="ProveedorId" class="form-select">
+                    <label class="form-label agrocmp-label">Cliente</label>
+                    <select asp-for="ClienteId" class="form-select">
                         <option value="">-- Seleccione --</option>
-                        @foreach (var item in ViewBag.Proveedores)
+                        @foreach (var item in ViewBag.Clientes)
                         {
                             <option value="@item.Id">@item.Nombre</option>
                         }
+                    </select>
+                    <span asp-validation-for="ClienteId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="agrocmp-card mb-3">
+                    <label class="agrocmp-label">Método de Pago</label>
+                    <select asp-for="MetodoPago" class="form-select">
+                        <option value="">-- Seleccione --</option>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Tarjeta">Tarjeta</option>
+                        <option value="Transferencia">Transferencia</option>
                     </select>
                 </div>
             </div>
@@ -25,31 +37,22 @@
 
         <hr />
 
-        
         <h5 class="agrocmp-title mb-3">🛒 Productos</h5>
 
-        <div class="row">
-            <div class="col-12">
-                <div class="agrocmp-card">
-
-                    <div class="table-responsive">
-                        <table class="table table-bordered agrocmp-table align-middle text-center" id="tablaDetalles">
-                            <thead>
-                                <tr>
-                                    <th>Producto</th>
-                                    <th>Presentación</th>
-                                    <th>Cantidad</th>
-                                    <th>Precio</th>
-                                    <th>SubTotal</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-
-                </div>
-            </div>
+        <div class="table-responsive">
+            <table class="table table-bordered text-center" id="tablaDetalles">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Presentación</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>SubTotal</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
 
         <button type="button" class="btn btn-primary mt-3" onclick="agregarFila()">
@@ -58,74 +61,99 @@
 
         <hr />
 
-        
         <div class="row">
             <div class="col-md-4">
-                <div class="agrocmp-card">
-                    <label class="agrocmp-label">Total</label>
-                    <input asp-for="Total" class="form-control text-end fw-bold" readonly />
-                </div>
+                <input asp-for="SubTotal" class="form-control" readonly />
+            </div>
+            <div class="col-md-4">
+                <input asp-for="Iva" class="form-control" readonly />
+            </div>
+            <div class="col-md-4">
+                <input asp-for="Total" class="form-control" readonly />
             </div>
         </div>
 
-        
         <div class="mt-4 text-end">
-            <button type="submit" class="btn btn-success me-2">
-                Guardar
-            </button>
-
-            <a asp-action="Index" class="btn btn-secondary">
-                Cancelar
-            </a>
+            <button type="submit" class="btn btn-success">Guardar</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
         </div>
 
     </form>
-
 </div>
 
 @section Scripts {
     <script>
         let index = 0;
 
+        // 🔥 PRODUCTOS CON STOCK REAL (YA FORMATEADO DESDE EL CONTROLLER)
+        const productos = [
+        @foreach (var p in ViewBag.Productos)
+        {
+                    <text>
+                            {
+                                id: @p.Id,
+                                nombre: "@p.Nombre",
+                                stock: @p.Stock,
+                                stockTexto: "@ViewBag.StockFormateado[p.Id]"
+                            },
+                    </text>
+        }
+        ];
+
+        // 🔥 PRESENTACIONES
+        const presentaciones = [
+        @foreach (var p in ViewBag.Presentaciones)
+        {
+                    <text>
+                            { id: @p.Id, nombre: "@p.Nombre" },
+                    </text>
+        }
+        ];
+
+        // 🔥 AGREGAR FILA
         function agregarFila() {
             let fila = `
             <tr>
                 <td>
                     <select name="detalles[${index}].ProductoId" class="form-select">
-                        ${generarProductos()}
+                        <option value="">Seleccione</option>
+                        ${productos.map(p =>
+                            `<option value="${p.id}" data-stock="${p.stock}">
+                                ${p.nombre} (Stock: ${p.stockTexto})
+                            </option>`
+                        ).join("")}
                     </select>
                 </td>
 
                 <td>
                     <select name="detalles[${index}].ProductoPresentacionId" class="form-select">
                         <option value="">--</option>
-                        ${generarPresentaciones()}
+                        ${presentaciones.map(p =>
+                            `<option value="${p.id}">${p.nombre}</option>`
+                        ).join("")}
                     </select>
                 </td>
 
                 <td>
-                    <input type="number" name="detalles[${index}].Cantidad"
-                           class="form-control text-center"
-                           onchange="calcular(this)" />
+                    <input type="number"
+                           name="detalles[${index}].Cantidad"
+                           class="form-control"
+                           onchange="validarStock(this); calcular(this)" />
                 </td>
 
                 <td>
                     <input type="number" step="0.01"
                            name="detalles[${index}].Precio"
-                           class="form-control text-center"
+                           class="form-control"
                            onchange="calcular(this)" />
                 </td>
 
                 <td>
-                    <input type="text"
-                           class="form-control subtotal text-center fw-bold"
-                           readonly />
+                    <input type="text" class="form-control subtotal" readonly />
                 </td>
 
                 <td>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">
-                        X
-                    </button>
+                    <button type="button" class="btn btn-danger" onclick="eliminarFila(this)">X</button>
                 </td>
             </tr>
             `;
@@ -134,16 +162,18 @@
             index++;
         }
 
+        // 🔥 ELIMINAR FILA
         function eliminarFila(btn) {
             btn.closest("tr").remove();
             calcularTotal();
         }
 
+        // 🔥 CALCULAR SUBTOTAL
         function calcular(input) {
             let fila = input.closest("tr");
 
-            let cantidad = parseFloat(fila.querySelector("input[name*='Cantidad']").value) || 0;
-            let precio = parseFloat(fila.querySelector("input[name*='Precio']").value) || 0;
+            let cantidad = fila.querySelector("[name*='Cantidad']").value || 0;
+            let precio = fila.querySelector("[name*='Precio']").value || 0;
 
             let subtotal = cantidad * precio;
 
@@ -152,36 +182,35 @@
             calcularTotal();
         }
 
+        // 🔥 CALCULAR TOTAL
         function calcularTotal() {
-            let total = 0;
+            let subtotal = 0;
 
             document.querySelectorAll(".subtotal").forEach(s => {
-                total += parseFloat(s.value) || 0;
+                subtotal += parseFloat(s.value) || 0;
             });
 
-            document.querySelector("input[name='Total']").value = total.toFixed(2);
+            let iva = subtotal * 0.13;
+            let total = subtotal + iva;
+
+            document.querySelector("[name='SubTotal']").value = subtotal.toFixed(2);
+            document.querySelector("[name='Iva']").value = iva.toFixed(2);
+            document.querySelector("[name='Total']").value = total.toFixed(2);
         }
 
-        function generarProductos() {
-            let html = "";
-            @foreach (var p in ViewBag.Productos)
-            {
-                        <text>
-                                    html += `<option value="@p.Id">@p.Nombre</option>`;
-                        </text>
-            }
-            return html;
-        }
+        // 🔥 VALIDAR STOCK
+        function validarStock(input) {
+            let fila = input.closest("tr");
+            let select = fila.querySelector("select[name*='ProductoId']");
+            let selected = select.options[select.selectedIndex];
 
-        function generarPresentaciones() {
-            let html = "";
-            @foreach (var p in ViewBag.Presentaciones)
-            {
-                        <text>
-                                    html += `<option value="@p.Id">@p.Nombre</option>`;
-                        </text>
+            let stock = parseFloat(selected.getAttribute("data-stock")) || 0;
+            let cantidad = parseFloat(input.value) || 0;
+
+            if (cantidad > stock) {
+                alert("⚠️ Stock insuficiente");
+                input.value = "";
             }
-            return html;
         }
     </script>
 }

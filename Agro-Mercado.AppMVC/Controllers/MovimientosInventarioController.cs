@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Agro_Mercado.AppMVC.Controllers
 {
-    public class MovimientosInventarioController : Controller
+    public class MovimientosInventarioController : BaseController
     {
         private readonly AgroMercadoSprintContext _context;
 
@@ -16,7 +16,9 @@ namespace Agro_Mercado.AppMVC.Controllers
 
         public IActionResult Index(MovimientosInventario? movimientoSearch, int topRegistro = 5)
         {
-            
+            if (!TieneAcceso(1, 6, 10))
+                return RedirectToAction("Index", "Home");
+
             if (movimientoSearch == null)
                 movimientoSearch = new MovimientosInventario();
 
@@ -55,6 +57,9 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult CrearEntradaInicial()
         {
+            if (!TieneAcceso(1, 6, 10))
+                return RedirectToAction("Index", "Home");
+
             ViewBag.Productos = new SelectList(
                 _context.Productos.Where(p => p.Activo == true),
                 "Id",
@@ -77,6 +82,9 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CrearEntradaInicial(int productoId, int productoPresentacionId, decimal cantidad, string motivo)
         {
+            if (!TieneAcceso(1, 6, 10))
+                return RedirectToAction("Index", "Home");
+
             if (cantidad <= 0)
                 ModelState.AddModelError("", "La cantidad debe ser mayor a 0");
 
@@ -140,6 +148,9 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult CrearEntrada()
         {
+            if (!TieneAcceso(1, 6, 10))
+                return RedirectToAction("Index", "Home");
+
             ViewBag.Productos = new SelectList(
                 _context.Productos.Where(p => p.Activo == true),
                 "Id",
@@ -162,6 +173,9 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CrearEntrada(int productoId, int productoPresentacionId, decimal cantidad, string motivo)
         {
+            if (!TieneAcceso(1, 6, 10))
+                return RedirectToAction("Index", "Home");
+
             if (cantidad <= 0)
                 ModelState.AddModelError("", "Cantidad inválida");
 
@@ -213,6 +227,9 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult CrearSalida()
         {
+            if (!TieneAcceso(1, 6, 10))
+                return RedirectToAction("Index", "Home");
+
             ViewBag.Productos = new SelectList(
                 _context.Productos.Where(p => p.Activo == true),
                 "Id",
@@ -242,6 +259,9 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CrearSalida(int productoId, int productoPresentacionId, decimal cantidad, string motivo)
         {
+            if (!TieneAcceso(1, 6, 10))
+                return RedirectToAction("Index", "Home");
+
             if (cantidad <= 0)
                 ModelState.AddModelError("", "Cantidad inválida");
 
@@ -309,6 +329,9 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult Details(int id)
         {
+            if (!TieneAcceso(1, 6, 10))
+                return RedirectToAction("Index", "Home");
+
             var movimiento = _context.MovimientosInventarios
                 .Include(m => m.Producto)
                 .FirstOrDefault(m => m.Id == id);
@@ -321,6 +344,9 @@ namespace Agro_Mercado.AppMVC.Controllers
         
         public IActionResult Delete(int id)
         {
+            if (!TieneAcceso(1, 6, 10))
+                return RedirectToAction("Index", "Home");
+
             var movimiento = _context.MovimientosInventarios
                 .Include(m => m.Producto)
                 .FirstOrDefault(m => m.Id == id);
@@ -335,6 +361,9 @@ namespace Agro_Mercado.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
+            if (!TieneAcceso(1, 6, 10))
+                return RedirectToAction("Index", "Home");
+
             var movimiento = _context.MovimientosInventarios.Find(id);
 
             if (movimiento != null)

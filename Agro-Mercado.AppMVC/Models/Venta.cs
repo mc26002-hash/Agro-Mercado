@@ -14,7 +14,7 @@ public partial class Venta
     public DateTime Fecha { get; set; }
 
     [Required(ErrorMessage = "Debe seleccionar un cliente")]
-    public int ClienteId { get; set; }
+    public int? ClienteId { get; set; }
 
     [Required(ErrorMessage = "Debe seleccionar un empleado")]
     public int EmpleadoId { get; set; }
@@ -40,6 +40,6 @@ public partial class Venta
     public virtual Cliente Cliente { get; set; } = null!;
     public virtual Empleado Empleado { get; set; } = null!;
 
-   
+    // 🔥 RELACIÓN CLAVE
     public virtual ICollection<DetalleVentum> DetalleVenta { get; set; } = new List<DetalleVentum>();
 }
